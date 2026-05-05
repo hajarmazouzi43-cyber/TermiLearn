@@ -102,7 +102,7 @@ const sendMessage = async (text: string) => {
       text: reply
     }])
 
-  } catch (error: any) {
+  } catch (error:unknown) {
     setMessages(prev => [...prev, {
       id: (Date.now() + 1).toString(),
       role: 'assistant',

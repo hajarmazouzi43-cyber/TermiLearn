@@ -7,6 +7,10 @@ import Terminal from '../components/Terminal'
 import MissionPanel from '../components/MissionPanel'
 import CheatSheet from '../components/CheatSheet'
 import AICopilot from '../components/AICopilot'
+// Ajoute cet import
+import QuizPanel from '../components/QuizPanel'
+
+
 
 interface TerminalPageProps {
   userId: string
@@ -24,6 +28,8 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
   const [completedMissions, setCompletedMissions] = useState<number[]>([])
   const [resetting, setResetting] = useState(false)
   const { setFilesystem, resetShell, cwd } = useShellStore()
+  // Ajoute cet état
+const [showQuiz, setShowQuiz] = useState(false)
 
   useEffect(() => {
     const init = async () => {
@@ -110,7 +116,9 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
           <button onClick={() => setShowMissions(m => !m)}
             style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 9, border: '1.5px solid', fontSize: 13, fontWeight: 700, cursor: 'pointer', backgroundColor: showMissions ? '#fefce8' : 'white', borderColor: showMissions ? '#fde68a' : '#e2e8f0', color: showMissions ? '#b45309' : '#64748b' }}
           >🎯 Missions <span style={{ backgroundColor: completedMissions.length === 5 ? '#10b981' : '#e2e8f0', color: completedMissions.length === 5 ? 'white' : '#64748b', borderRadius: 20, padding: '1px 7px', fontSize: 11 }}>{completedMissions.length}/5</span></button>
-
+          <button onClick={() => setShowQuiz(q => !q)}
+            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 9, border: '1.5px solid', fontSize: 13, fontWeight: 700, cursor: 'pointer', backgroundColor: showQuiz ? '#f0fdf4' : 'white', borderColor: showQuiz ? '#bbf7d0' : '#e2e8f0', color: showQuiz ? '#059669' : '#64748b' }}
+          >📝 Quiz</button>
           <button onClick={() => setShowCheatSheet(true)}
             style={{ padding: '8px 16px', borderRadius: 9, border: '1.5px solid #e2e8f0', backgroundColor: 'white', color: '#64748b', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
           >📋 Cheat Sheet</button>
@@ -133,19 +141,19 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
       </nav>
 
       {/* MAIN CONTENT */}
-    {/* MAIN CONTENT */}
+{/* MAIN CONTENT */}
 <div style={{ maxWidth: 1400, margin: '0 auto', padding: '32px 24px', display: 'flex', gap: 24, alignItems: 'flex-start' }}>
 
-  {/* Left — missions or welcome */}
+  {/* Left */}
   <div style={{ flex: 1, minWidth: 0 }}>
-    {!showMissions ? (
+    {!showMissions && !showQuiz ? (
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         style={{ backgroundColor: 'white', borderRadius: 18, padding: 40, border: '1.5px solid #f1f5f9', boxShadow: '0 4px 24px rgba(0,0,0,0.05)', textAlign: 'center' }}
       >
         <div style={{ fontSize: 52, marginBottom: 16 }}>🖥️</div>
         <h2 style={{ fontSize: 26, fontWeight: 800, color: '#0f172a', marginBottom: 10 }}>Ready to practice?</h2>
         <p style={{ color: '#64748b', fontSize: 15, lineHeight: 1.7, maxWidth: 400, margin: '0 auto 28px' }}>
-          Open the terminal to run Linux commands in a safe virtual environment. Type any command to get started!
+          Open the terminal to run Linux commands in a safe virtual environment.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           <motion.button whileHover={{ y: -2 }} onClick={() => setShowTerminalModal(true)}
@@ -154,6 +162,9 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
           <motion.button whileHover={{ y: -2 }} onClick={() => setShowMissions(true)}
             style={{ padding: '13px 28px', borderRadius: 12, border: '1.5px solid #fde68a', backgroundColor: '#fefce8', color: '#b45309', fontWeight: 700, fontSize: 15, cursor: 'pointer' }}
           >🎯 View Missions</motion.button>
+          <motion.button whileHover={{ y: -2 }} onClick={() => setShowQuiz(true)}
+            style={{ padding: '13px 28px', borderRadius: 12, border: '1.5px solid #bbf7d0', backgroundColor: '#f0fdf4', color: '#059669', fontWeight: 700, fontSize: 15, cursor: 'pointer' }}
+          >📝 Take Quiz</motion.button>
         </div>
 
         <div style={{ marginTop: 40, textAlign: 'left' }}>
@@ -178,18 +189,57 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
           </div>
         </div>
       </motion.div>
+
+    ) : showQuiz ? (
+      <div style={{ backgroundColor: 'white', borderRadius: 18, border: '1.5px solid #f1f5f9', boxShadow: '0 4px 24px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
+        <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', marginBottom: 2 }}>📝 Quiz Linux</h2>
+            <p style={{ fontSize: 12, color: '#94a3b8', margin: 0 }}>15 questions • Progressif • Easy → Hard</p>
+          </div>
+          <button onClick={() => setShowQuiz(false)}
+            style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: 20 }}
+          >✕</button>
+        </div>
+        <QuizPanel onClose={() => setShowQuiz(false)} />
+      </div>
+
     ) : (
       <div style={{ backgroundColor: 'white', borderRadius: 18, padding: 24, border: '1.5px solid #f1f5f9', boxShadow: '0 4px 24px rgba(0,0,0,0.05)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
           <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a' }}>🎯 Missions</h2>
-          <button onClick={() => setShowTerminalModal(true)}
-            style={{ padding: '8px 16px', borderRadius: 9, border: 'none', backgroundColor: '#0f172a', color: '#10b981', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'monospace' }}
-          >$ Open Terminal</button>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={() => { setShowMissions(false); setShowQuiz(true) }}
+              style={{ padding: '8px 16px', borderRadius: 9, border: '1.5px solid #bbf7d0', backgroundColor: '#f0fdf4', color: '#059669', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
+            >📝 Quiz</button>
+            <button onClick={() => setShowTerminalModal(true)}
+              style={{ padding: '8px 16px', borderRadius: 9, border: 'none', backgroundColor: '#0f172a', color: '#10b981', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'monospace' }}
+            >$ Open Terminal</button>
+          </div>
         </div>
         <MissionPanel userId={userId} completedMissions={completedMissions} onMissionComplete={handleMissionComplete} />
       </div>
     )}
   </div>
+
+  {/* Right — AI Copilot */}
+  <AnimatePresence>
+    {showCopilot && (
+      <motion.div
+        initial={{ opacity: 0, x: 40, width: 0 }}
+        animate={{ opacity: 1, x: 0, width: 360 }}
+        exit={{ opacity: 0, x: 40, width: 0 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        style={{ flexShrink: 0, overflow: 'hidden', height: 'calc(100vh - 124px)', position: 'sticky', top: 92 }}
+      >
+        <div style={{ width: 360, height: '100%', backgroundColor: 'white', borderRadius: 18, border: '1.5px solid #f1f5f9', boxShadow: '0 4px 24px rgba(0,0,0,0.08)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+          <AICopilot onClose={() => setShowCopilot(false)} currentCwd={cwd} />
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+
+</div>
 
   {/* Right — AI Copilot panel */}
   <AnimatePresence>
