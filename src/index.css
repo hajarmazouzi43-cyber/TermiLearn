@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0f172a;
+  --color-accent: #06b6d4;
+  --color-terminal-green: #10b981;
+  --backdrop-blur-md: blur(12px);
+  --color-terminal-error: #f87171;
+  --color-terminal-blue: #60a5fa;
+  --color-terminal-bg: #030712;
+  --shadow-glow-green: 0 0 15px rgba(16, 185, 129, 0.2);
+  --shadow-glow-blue: 0 0 15px rgba(96, 165, 250, 0.2);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: #f8fafc;
+  color: #1f2937;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+@layer components {
+  .terminal-window {
+    background: rgba(15, 23, 42, 0.97);
+    backdrop-filter: var(--backdrop-blur-md);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), var(--shadow-glow-green);
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  .terminal-header {
+    background: rgba(30, 41, 59, 0.8);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .terminal-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+
+  .mission-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .mission-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-terminal-green, .text-green-400 {
+    color: var(--color-terminal-green) !important;
+    text-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+  }
+
+  .text-blue-400 {
+    color: var(--color-terminal-blue) !important;
+    text-shadow: 0 0 8px rgba(96, 165, 250, 0.4);
+    font-weight: 600;
+  }
+
+  .text-red-400 {
+    color: var(--color-terminal-error) !important;
+    text-shadow: 0 0 5px rgba(248, 113, 113, 0.2);
+  }
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+.cursor-blink {
+  display: inline-block;
+  width: 8px;
+  height: 18px;
+  background-color: var(--color-terminal-green);
+  animation: blink 1s step-end infinite;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.overflow-y-auto::-webkit-scrollbar { width: 4px; }
+.overflow-y-auto::-webkit-scrollbar-track { background: transparent; }
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--color-terminal-green);
+}
