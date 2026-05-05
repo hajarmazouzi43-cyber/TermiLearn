@@ -8,7 +8,14 @@
 ![Netlify](https://img.shields.io/badge/Deployed-Netlify-00C7B7?logo=netlify)
 
 ---
+## 👩‍💻 Author
 
+**Hajar Mazouzi**  
+ENSA Berrechid — Technologies Web 2025-2026  
+Pr. Ilhame Ait Lbachir  
+GitHub: [@hajarmazouzi43-cyber](https://github.com/hajarmazouzi43-cyber)
+
+---
 ## 📖 About
 
 **TermiLearn** is an interactive web application that allows students to learn and practice Linux commands directly in their browser, without installing any software. Built for ENSA Berrechid students as part of the Web Technologies module.
@@ -29,6 +36,7 @@
 - 🎨 **Syntax Highlighting** — colored output (directories in blue, errors in red)
 - 💡 **Progressive Hints** — 3-level hint system for each mission
 - 📋 **Cheat Sheet** — quick reference for all available commands
+- 🤖 AI Copilot — LinuxBot powered by AI to answer Linux questions in real-time
 
 ---
 
@@ -44,6 +52,7 @@
 | Framer Motion | Latest | Animations |
 | Tailwind CSS | 4 | Styling |
 | Vitest | Latest | Unit testing |
+| OpenRouter | Latest | AI API (LinuxBot)
 
 ---
 
