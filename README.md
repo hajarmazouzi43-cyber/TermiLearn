@@ -20,7 +20,7 @@ GitHub: [@hajarmazouzi43-cyber](https://github.com/hajarmazouzi43-cyber)
 
 **TermiLearn** is an interactive web application that allows students to learn and practice Linux commands directly in their browser, without installing any software. Built for ENSA Berrechid students as part of the Web Technologies module.
 
-**Live Demo:** [termilearn.netlify.app](https://your-netlify-url.netlify.app)
+**Live Demo:** [termilearn.netlify.app](https://termilearn.netlify.app)
 
 ---
 
