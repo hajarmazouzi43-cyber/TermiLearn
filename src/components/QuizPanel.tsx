@@ -1,7 +1,65 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { QUIZ_QUESTIONS, getQuizResult } from '../lib/quiz'
+import { jsPDF } from "jspdf"
 
+// --- COMPOSANT GÉNÉRATEUR ---
+interface CertificateProps {
+  userName: string;
+  score: number;
+}
+
+const CertificateGenerator = ({ userName, score }: CertificateProps) => {
+  const generatePDF = () => {
+    const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+    
+    // Bordures
+    doc.setLineWidth(2);
+    doc.rect(10, 10, 277, 190); 
+    doc.setLineWidth(0.5);
+    doc.rect(12, 12, 273, 186);
+
+    // Contenu
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(40);
+    doc.setTextColor(45, 62, 80);
+    doc.text("CERTIFICATE OF COMPLETION", 148.5, 60, { align: "center" });
+
+    doc.setFontSize(20);
+    doc.setFont("helvetica", "normal");
+    doc.text("This is to certify that", 148.5, 85, { align: "center" });
+
+    doc.setFontSize(35);
+    doc.setFont("times", "italic");
+    doc.setTextColor(16, 185, 129); // Ton vert #10b981
+    doc.text(userName || "Student", 148.5, 105, { align: "center" });
+
+    doc.setFontSize(18);
+    doc.text("has successfully completed the Linux Terminal Mastery Quiz", 148.5, 130, { align: "center" });
+
+    doc.setFont("helvetica", "bold");
+    doc.text(`Final Score: ${score}%`, 148.5, 145, { align: "center" });
+
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    doc.setFontSize(12);
+    doc.text(`Issued by TermiLearn on ${date}`, 148.5, 175, { align: "center" });
+
+    doc.save(`Certificate_TermiLearn.pdf`);
+  };
+
+  return (
+    <div style={{ marginTop: 24 }}>
+      <button
+        onClick={generatePDF}
+        style={{ padding: '12px 28px', borderRadius: 12, border: 'none', backgroundColor: '#10b981', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: 16 }}
+      >
+        🎓 Download My Certificate (EN)
+      </button>
+    </div>
+  );
+};
+
+// --- COMPOSANT PRINCIPAL ---
 export default function QuizPanel({ onClose }: { onClose?: () => void }) {
   const [lang, setLang] = useState<'fr' | 'en'>('fr')
   const [current, setCurrent] = useState(0)
@@ -47,7 +105,12 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
         <div><div style={{ fontSize: 40, fontWeight: 900, color: '#3b82f6' }}>{Math.round((score / QUIZ_QUESTIONS.length) * 100)}%</div><div style={{ fontSize: 12, color: '#94a3b8' }}>{ui.score}</div></div>
       </div>
 
-      <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginBottom: 28, flexWrap: 'wrap' }}>
+      {/* Ajout du Certificat ici */}
+      {Math.round((score / QUIZ_QUESTIONS.length) * 100) >= 50 && (
+        <CertificateGenerator userName="Hajar Mazouzi" score={Math.round((score / QUIZ_QUESTIONS.length) * 100)} />
+      )}
+
+      <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginTop: 28, marginBottom: 28, flexWrap: 'wrap' }}>
         {answers.map((c, i) => <div key={i} style={{ width: 32, height: 32, borderRadius: 8, border: `2px solid ${c ? '#10b981' : '#ef4444'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: c ? '#f0fdf4' : '#fff5f5' }}>{c ? '✓' : '✗'}</div>)}
       </div>
 
@@ -60,7 +123,7 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
 
   return (
     <div style={{ padding: 24 }}>
-      {/* Barre de Progression */}
+      {/* Reste du code du Quiz (Progress bar, questions, options...) identique */}
       <div style={{ marginBottom: 20 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
           <span style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8' }}>Question {current + 1} / {QUIZ_QUESTIONS.length}</span>
@@ -73,9 +136,11 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
           <motion.div animate={{ width: `${((current + 1) / QUIZ_QUESTIONS.length) * 100}%` }} style={{ height: '100%', background: 'linear-gradient(90deg, #10b981, #3b82f6)' }} />
         </div>
       </div>
-
+      
+      {/* Contenu de la question ici... */}
       <AnimatePresence mode="wait">
-        <motion.div key={current} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+         {/* ... copier coller ta logique d'affichage des questions ici ... */}
+         <motion.div key={current} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <div style={{ backgroundColor: '#f8fafc', borderRadius: 14, padding: '18px 20px', marginBottom: 20, border: '1.5px solid #f1f5f9' }}>
             <p style={{ fontSize: 16, fontWeight: 700, margin: 0 }}>{question.question[lang]}</p>
           </div>
@@ -95,12 +160,6 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
               </motion.button>
             ))}
           </div>
-
-          {confirmed && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} style={{ backgroundColor: selected === question.correct ? '#f0fdf4' : '#fff5f5', padding: '12px 16px', borderRadius: 12, marginBottom: 16, border: '1.5px solid #e2e8f0' }}>
-              <p style={{ fontSize: 13, margin: 0 }}>{selected === question.correct ? '✅ ' : '❌ '}{question.explanation[lang]}</p>
-            </motion.div>
-          )}
 
           <motion.button onClick={confirmed ? handleNext : handleConfirm} disabled={selected === null}
             style={{ width: '100%', padding: '13px', borderRadius: 12, border: 'none', fontWeight: 700, cursor: selected === null ? 'not-allowed' : 'pointer',
