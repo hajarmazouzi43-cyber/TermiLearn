@@ -1,5 +1,47 @@
 @import "tailwindcss";
 
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #ffffff;
+  color: #1e293b;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Fix autofill background color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #0c0c14 inset !important;
+  -webkit-text-fill-color: white !important;
+  caret-color: white !important;
+  border-radius: 16px !important;
+}
+
+/* Remove default browser styling */
+input:focus {
+  outline: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
 @theme {
   --color-primary: #0f172a;
   --color-accent: #06b6d4;

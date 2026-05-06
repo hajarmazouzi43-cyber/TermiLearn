@@ -1,156 +1,220 @@
 export interface QuizQuestion {
   id: number
-  question: string
-  options: string[]
+  question: { fr: string, en: string }
+  options: { fr: string, en: string }[]
   correct: number
   difficulty: 'easy' | 'medium' | 'hard'
-  explanation: string
+  explanation: { fr: string, en: string }
 }
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
-  // EASY (1-5)
   {
     id: 1,
-    question: "Quelle commande affiche le contenu d'un répertoire ?",
-    options: ["pwd", "ls", "cd", "cat"],
+    question: { fr: "Quelle commande affiche le contenu d'un répertoire ?", en: "Which command lists directory contents?" },
+    options: [
+      { fr: "pwd", en: "pwd" }, { fr: "ls", en: "ls" }, { fr: "cd", en: "cd" }, { fr: "cat", en: "cat" }
+    ],
     correct: 1,
     difficulty: 'easy',
-    explanation: "`ls` liste les fichiers et dossiers du répertoire courant."
+    explanation: { fr: "`ls` liste les fichiers et dossiers du répertoire courant.", en: "`ls` lists files and folders in the current directory." }
   },
   {
     id: 2,
-    question: "Quelle commande affiche le chemin du répertoire courant ?",
-    options: ["ls", "cd", "pwd", "echo"],
+    question: { fr: "Quelle commande affiche le chemin du répertoire courant ?", en: "Which command shows the current directory path?" },
+    options: [
+      { fr: "ls", en: "ls" },
+      { fr: "cd", en: "cd" },
+      { fr: "pwd", en: "pwd" },
+      { fr: "echo", en: "echo" }
+    ],
     correct: 2,
     difficulty: 'easy',
-    explanation: "`pwd` (Print Working Directory) affiche le chemin absolu du répertoire courant."
+    explanation: { fr: "`pwd` (Print Working Directory) affiche le chemin absolu.", en: "`pwd` (Print Working Directory) displays the absolute path." }
   },
   {
     id: 3,
-    question: "Comment créer un fichier vide appelé 'notes.txt' ?",
-    options: ["mkdir notes.txt", "touch notes.txt", "cat notes.txt", "echo notes.txt"],
+    question: { fr: "Comment créer un fichier vide appelé 'notes.txt' ?", en: "How do you create an empty file named 'notes.txt'?" },
+    options: [
+      { fr: "mkdir notes.txt", en: "mkdir notes.txt" },
+      { fr: "touch notes.txt", en: "touch notes.txt" },
+      { fr: "cat notes.txt", en: "cat notes.txt" },
+      { fr: "echo notes.txt", en: "echo notes.txt" }
+    ],
     correct: 1,
     difficulty: 'easy',
-    explanation: "`touch` crée un fichier vide ou met à jour la date d'un fichier existant."
+    explanation: { fr: "`touch` crée un fichier vide ou met à jour l'horodatage.", en: "`touch` creates an empty file or updates the timestamp." }
   },
   {
     id: 4,
-    question: "Quelle commande permet de lire le contenu d'un fichier ?",
-    options: ["ls", "pwd", "mkdir", "cat"],
+    question: { fr: "Quelle commande permet de lire le contenu d'un fichier ?", en: "Which command allows you to read a file's content?" },
+    options: [
+      { fr: "ls", en: "ls" },
+      { fr: "pwd", en: "pwd" },
+      { fr: "mkdir", en: "mkdir" },
+      { fr: "cat", en: "cat" }
+    ],
     correct: 3,
     difficulty: 'easy',
-    explanation: "`cat` affiche le contenu d'un fichier dans le terminal."
+    explanation: { fr: "`cat` affiche le contenu d'un fichier dans le terminal.", en: "`cat` displays the content of a file in the terminal." }
   },
   {
     id: 5,
-    question: "Comment créer un dossier appelé 'projects' ?",
-    options: ["touch projects", "mkdir projects", "cd projects", "ls projects"],
+    question: { fr: "Comment créer un dossier appelé 'projects' ?", en: "How do you create a folder named 'projects'?" },
+    options: [
+      { fr: "touch projects", en: "touch projects" },
+      { fr: "mkdir projects", en: "mkdir projects" },
+      { fr: "cd projects", en: "cd projects" },
+      { fr: "ls projects", en: "ls projects" }
+    ],
     correct: 1,
     difficulty: 'easy',
-    explanation: "`mkdir` (Make Directory) crée un nouveau répertoire."
+    explanation: { fr: "`mkdir` (Make Directory) crée un nouveau répertoire.", en: "`mkdir` (Make Directory) creates a new directory." }
   },
-  // MEDIUM (6-10)
   {
     id: 6,
-    question: "Quelle commande copie le fichier 'a.txt' dans le dossier 'docs/' ?",
-    options: ["mv a.txt docs/", "cp a.txt docs/", "cat a.txt docs/", "ls a.txt docs/"],
+    question: { fr: "Quelle commande copie 'a.txt' dans 'docs/' ?", en: "Which command copies 'a.txt' into 'docs/'?" },
+    options: [
+      { fr: "mv a.txt docs/", en: "mv a.txt docs/" },
+      { fr: "cp a.txt docs/", en: "cp a.txt docs/" },
+      { fr: "cat a.txt docs/", en: "cat a.txt docs/" },
+      { fr: "ls a.txt docs/", en: "ls a.txt docs/" }
+    ],
     correct: 1,
     difficulty: 'medium',
-    explanation: "`cp` copie un fichier vers une destination sans supprimer l'original."
+    explanation: { fr: "`cp` copie sans supprimer l'original.", en: "`cp` copies without removing the original file." }
   },
   {
     id: 7,
-    question: "Comment supprimer un dossier et tout son contenu ?",
-    options: ["rm folder", "rm -r folder", "delete folder", "rmdir -f folder"],
+    question: { fr: "Comment supprimer un dossier et tout son contenu ?", en: "How do you delete a folder and all its content?" },
+    options: [
+      { fr: "rm folder", en: "rm folder" },
+      { fr: "rm -r folder", en: "rm -r folder" },
+      { fr: "delete folder", en: "delete folder" },
+      { fr: "rmdir -f folder", en: "rmdir -f folder" }
+    ],
     correct: 1,
     difficulty: 'medium',
-    explanation: "`rm -r` supprime récursivement un dossier et tout ce qu'il contient."
+    explanation: { fr: "`rm -r` supprime récursivement un dossier.", en: "`rm -r` recursively deletes a folder." }
   },
   {
     id: 8,
-    question: "Quelle commande renomme 'old.txt' en 'new.txt' ?",
-    options: ["cp old.txt new.txt", "rename old.txt new.txt", "mv old.txt new.txt", "touch new.txt"],
+    question: { fr: "Quelle commande renomme 'old.txt' en 'new.txt' ?", en: "Which command renames 'old.txt' to 'new.txt'?" },
+    options: [
+      { fr: "cp old.txt new.txt", en: "cp old.txt new.txt" },
+      { fr: "rename old.txt new.txt", en: "rename old.txt new.txt" },
+      { fr: "mv old.txt new.txt", en: "mv old.txt new.txt" },
+      { fr: "touch new.txt", en: "touch new.txt" }
+    ],
     correct: 2,
     difficulty: 'medium',
-    explanation: "`mv` déplace ou renomme un fichier selon la destination donnée."
+    explanation: { fr: "`mv` déplace ou renomme un fichier.", en: "`mv` moves or renames a file." }
   },
   {
     id: 9,
-    question: "Que fait la commande `ls -la` ?",
+    question: { fr: "Que fait la commande `ls -la` ?", en: "What does the `ls -la` command do?" },
     options: [
-      "Liste seulement les dossiers",
-      "Liste les fichiers avec détails et fichiers cachés",
-      "Supprime les fichiers cachés",
-      "Crée un fichier nommé -la"
+      { fr: "Liste seulement les dossiers", en: "Lists only folders" },
+      { fr: "Liste tout avec détails et fichiers cachés", en: "Lists everything with details and hidden files" },
+      { fr: "Supprime les fichiers cachés", en: "Deletes hidden files" },
+      { fr: "Crée un fichier nommé -la", en: "Creates a file named -la" }
     ],
     correct: 1,
     difficulty: 'medium',
-    explanation: "`-l` affiche les détails, `-a` inclut les fichiers cachés (commençant par .)"
+    explanation: { fr: "`-l` pour les détails, `-a` pour le 'all' (cachés inclus).", en: "`-l` for details, `-a` for 'all' (including hidden)." }
   },
   {
     id: 10,
-    question: "Que représente `~` dans un chemin Linux ?",
+    question: { fr: "Que représente `~` dans un chemin Linux ?", en: "What does `~` represent in a Linux path?" },
     options: [
-      "Le répertoire racine /",
-      "Le répertoire courant",
-      "Le répertoire home de l'utilisateur",
-      "Le répertoire parent"
+      { fr: "Le répertoire racine /", en: "The root directory /" },
+      { fr: "Le répertoire courant", en: "The current directory" },
+      { fr: "Le répertoire home de l'utilisateur", en: "The user's home directory" },
+      { fr: "Le répertoire parent", en: "The parent directory" }
     ],
     correct: 2,
     difficulty: 'medium',
-    explanation: "`~` est un raccourci pour `/home/username`, le répertoire personnel."
+    explanation: { fr: "`~` est un raccourci vers votre dossier personnel.", en: "`~` is a shortcut to your personal home folder." }
   },
-  // HARD (11-15)
   {
     id: 11,
-    question: "Comment naviguer vers le répertoire parent ?",
-    options: ["cd /", "cd ~", "cd ..", "cd -"],
-    correct: 2,
-    difficulty: 'hard',
-    explanation: "`..` représente le répertoire parent. `cd ..` remonte d'un niveau."
-  },
-  {
-    id: 12,
-    question: "Quelle commande affiche l'utilisateur connecté ?",
-    options: ["id", "user", "whoami", "echo $user"],
-    correct: 2,
-    difficulty: 'hard',
-    explanation: "`whoami` affiche le nom de l'utilisateur actuellement connecté."
-  },
-  {
-    id: 13,
-    question: "Comment afficher l'historique des commandes ?",
-    options: ["log", "history", "past", "echo history"],
-    correct: 1,
-    difficulty: 'hard',
-    explanation: "`history` affiche la liste des commandes précédemment exécutées."
-  },
-  {
-    id: 14,
-    question: "Que fait `echo Hello World` ?",
+    question: { fr: "Comment naviguer vers le répertoire parent ?", en: "How do you navigate to the parent directory?" },
     options: [
-      "Crée un fichier Hello World",
-      "Cherche Hello World dans les fichiers",
-      "Affiche 'Hello World' dans le terminal",
-      "Supprime Hello World"
+      { fr: "cd /", en: "cd /" },
+      { fr: "cd ~", en: "cd ~" },
+      { fr: "cd ..", en: "cd .." },
+      { fr: "cd -", en: "cd -" }
     ],
     correct: 2,
     difficulty: 'hard',
-    explanation: "`echo` affiche le texte passé en argument dans la sortie standard."
+    explanation: { fr: "`..` représente le niveau supérieur.", en: "`..` represents the level above." }
+  },
+  {
+    id: 12,
+    question: { fr: "Quelle commande affiche l'utilisateur connecté ?", en: "Which command displays the logged-in user?" },
+    options: [
+      { fr: "id", en: "id" },
+      { fr: "user", en: "user" },
+      { fr: "whoami", en: "whoami" },
+      { fr: "echo $user", en: "echo $user" }
+    ],
+    correct: 2,
+    difficulty: 'hard',
+    explanation: { fr: "`whoami` affiche votre nom d'utilisateur.", en: "`whoami` shows your current username." }
+  },
+  {
+    id: 13,
+    question: { fr: "Comment afficher l'historique des commandes ?", en: "How do you display the command history?" },
+    options: [
+      { fr: "log", en: "log" },
+      { fr: "history", en: "history" },
+      { fr: "past", en: "past" },
+      { fr: "echo history", en: "echo history" }
+    ],
+    correct: 1,
+    difficulty: 'hard',
+    explanation: { fr: "`history` liste les dernières commandes tapées.", en: "`history` lists the last commands typed." }
+  },
+  {
+    id: 14,
+    question: { fr: "Que fait `echo Hello World` ?", en: "What does `echo Hello World` do?" },
+    options: [
+      { fr: "Crée un fichier", en: "Creates a file" },
+      { fr: "Cherche du texte", en: "Searches for text" },
+      { fr: "Affiche le texte dans le terminal", en: "Displays text in the terminal" },
+      { fr: "Supprime le texte", en: "Deletes the text" }
+    ],
+    correct: 2,
+    difficulty: 'hard',
+    explanation: { fr: "`echo` renvoie les arguments vers la sortie standard.", en: "`echo` repeats the arguments to the standard output." }
   },
   {
     id: 15,
-    question: "Quelle touche permet l'autocomplétion dans le terminal ?",
-    options: ["Ctrl+C", "Enter", "Tab", "Espace"],
+    question: { fr: "Quelle touche permet l'autocomplétion ?", en: "Which key allows autocompletion?" },
+    options: [
+      { fr: "Ctrl+C", en: "Ctrl+C" }, { fr: "Enter", en: "Enter" }, { fr: "Tab", en: "Tab" }, { fr: "Espace", en: "Space" }
+    ],
     correct: 2,
     difficulty: 'hard',
-    explanation: "La touche `Tab` complète automatiquement les commandes et les chemins."
-  },
-]
+    explanation: { fr: "La touche `Tab` complète automatiquement les commandes.", en: "The `Tab` key completes commands automatically." }
+  }
+];
 
-export function getQuizResult(score: number, total: number) {
-  const percent = (score / total) * 100
-  if (percent >= 80) return { badge: '🥇', label: 'Expert', color: '#f59e0b', message: 'Excellent ! Tu maîtrises Linux !' }
-  if (percent >= 60) return { badge: '🥈', label: 'Intermédiaire', color: '#94a3b8', message: 'Bien joué ! Continue à pratiquer.' }
-  return { badge: '🥉', label: 'Débutant', color: '#cd7f32', message: 'Continue ! Relis le cours et réessaie.' }
+export function getQuizResult(score: number, total: number, lang: 'fr' | 'en') {
+  const percent = (score / total) * 100;
+  const content = {
+    fr: {
+      expert: { badge: '🥇', label: 'Expert', color: '#f59e0b', message: 'Excellent ! Tu maîtrises Linux !' },
+      inter: { badge: '🥈', label: 'Intermédiaire', color: '#94a3b8', message: 'Bien joué ! Continue à pratiquer.' },
+      beg: { badge: '🥉', label: 'Débutant', color: '#cd7f32', message: 'Continue ! Relis le cours et réessaie.' }
+    },
+    en: {
+      expert: { badge: '🥇', label: 'Expert', color: '#f59e0b', message: 'Excellent! You master Linux!' },
+      inter: { badge: '🥈', label: 'Intermediate', color: '#94a3b8', message: 'Well done! Keep practicing.' },
+      beg: { badge: '🥉', label: 'Beginner', color: '#cd7f32', message: 'Keep going! Review the course.' }
+    }
+  };
+  const res = content[lang];
+  if (percent >= 80) return res.expert;
+  if (percent >= 60) return res.inter;
+  return res.beg;
 }

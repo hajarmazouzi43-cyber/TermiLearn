@@ -41,122 +41,242 @@ export default function AuthForm() {
     }
   }
 
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    backgroundColor: '#f8fafc',
+    border: '1.5px solid #e2e8f0',
+    borderRadius: 5,
+    padding: '14px 18px',
+    fontSize: 15,
+    color: '#1e293b',
+    outline: 'none',
+    transition: 'border-color 0.2s',
+    marginTop: 10,
+    display: 'block',
+  }
+
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(34,197,94,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(34,197,94,0.03)_1px,transparent_1px)] bg-[size:32px_32px]" />
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #f0fdf4 0%, #eff6ff 50%, #faf5ff 100%)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 32,
+      fontFamily: "'Segoe UI', Arial, sans-serif",
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* Background blobs */}
+      <div style={{ position: 'absolute', top: -100, right: -100, width: 400, height: 400, background: 'rgba(16,185,129,0.1)', borderRadius: '50%', filter: 'blur(60px)' }} />
+      <div style={{ position: 'absolute', bottom: -100, left: -100, width: 400, height: 400, background: 'rgba(59,130,246,0.1)', borderRadius: '50%', filter: 'blur(60px)' }} />
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 500, height: 500, background: 'rgba(139,92,246,0.06)', borderRadius: '50%', filter: 'blur(80px)' }} />
 
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative w-full max-w-md"
+        style={{ position: 'relative', width: '100%', maxWidth: 540 }}
       >
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-3">
-            <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center shadow-lg shadow-green-500/30">
-              <span className="text-black font-bold text-sm">$_</span>
-            </div>
-            <span className="text-3xl font-bold text-white">TermiLearn</span>
-          </div>
-          <p className="text-gray-400 text-sm">Learn Linux in your browser — no installation needed</p>
+        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+            style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              width: 72, height: 72, borderRadius: 18,
+              background: 'linear-gradient(135deg, #10b981, #059669)',
+              boxShadow: '0 8px 32px rgba(16,185,129,0.35)',
+              marginBottom: 16
+            }}
+          >
+            <span style={{ fontSize: 28, fontWeight: 800, color: 'white', fontFamily: 'monospace' }}>$_</span>
+          </motion.div>
+          <h1 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: -0.5 }}>TermiLearn</h1>
+          <p style={{ color: '#64748b', fontSize: 15, marginTop: 6 }}>Learn Linux in your browser</p>
         </div>
 
         {/* Card */}
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-8 shadow-2xl">
-          {/* Terminal header bar */}
-          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-gray-800">
-            <div className="w-3 h-3 rounded-full bg-red-500" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500" />
-            <div className="w-3 h-3 rounded-full bg-green-500" />
-            <span className="ml-2 text-gray-500 text-xs font-mono">
-              {isLogin ? 'auth — login' : 'auth — register'}
-            </span>
-          </div>
+        <div style={{
+          backgroundColor: 'white',
+          borderRadius: 24,
+          padding: '48px 52px',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.08)',
+          border: '1px solid rgba(226,232,240,0.8)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          {/* Animated border lights */}
+          <motion.div
+            style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: 2,
+              background: 'linear-gradient(90deg, transparent, #10b981, #3b82f6, #8b5cf6, transparent)',
+            }}
+            animate={{ x: ['-100%', '100%'] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+          />
+          <motion.div
+            style={{
+              position: 'absolute', top: 0, right: 0, bottom: 0, width: 2,
+              background: 'linear-gradient(180deg, transparent, #8b5cf6, #ec4899, transparent)',
+            }}
+            animate={{ y: ['-100%', '100%'] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'linear', delay: 0.75 }}
+          />
+          <motion.div
+            style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0, height: 2,
+              background: 'linear-gradient(90deg, transparent, #ec4899, #f59e0b, #10b981, transparent)',
+            }}
+            animate={{ x: ['100%', '-100%'] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'linear', delay: 1.5 }}
+          />
+          <motion.div
+            style={{
+              position: 'absolute', top: 0, left: 0, bottom: 0, width: 2,
+              background: 'linear-gradient(180deg, transparent, #3b82f6, #10b981, transparent)',
+            }}
+            animate={{ y: ['100%', '-100%'] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'linear', delay: 2.25 }}
+          />
 
-          <h2 className="text-white text-xl font-semibold mb-6">
-            {isLogin ? 'Sign in to your session' : 'Create a new account'}
-          </h2>
+          <div style={{ position: 'relative' }}>
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#0f172a', marginBottom: 32 }}>
+              {isLogin ? 'Welcome back 👋' : 'Create your account'}
+            </h2>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {!isLogin && (
-              <div>
-                <label className="block text-gray-400 text-sm mb-1 font-mono">first_name</label>
-                <input
-                  type="text"
-                  value={firstName}
-                  onChange={e => setFirstName(e.target.value)}
-                  required={!isLogin}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white font-mono text-sm focus:outline-none focus:border-green-500 transition-colors"
-                  placeholder="Hajar"
-                />
+            <form onSubmit={handleSubmit}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+                {!isLogin && (
+                  <div>
+                    <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#64748b', letterSpacing: 1, textTransform: 'uppercase' }}>
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      value={firstName}
+                      onChange={e => setFirstName(e.target.value)}
+                      required={!isLogin}
+                      placeholder="Your first name"
+                      style={inputStyle}
+                      onFocus={e => e.target.style.borderColor = '#10b981'}
+                      onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#64748b', letterSpacing: 1, textTransform: 'uppercase' }}>
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                    autoComplete="off"
+                    placeholder="your@email.com"
+                    style={inputStyle}
+                    onFocus={e => e.target.style.borderColor = '#10b981'}
+                    onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#64748b', letterSpacing: 1, textTransform: 'uppercase' }}>
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                    autoComplete="new-password"
+                    placeholder="••••••••"
+                    style={inputStyle}
+                    onFocus={e => e.target.style.borderColor = '#10b981'}
+                    onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                  />
+                </div>
+
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      color: '#ef4444', fontSize: 13,
+                      backgroundColor: '#fff5f5',
+                      border: '1px solid #fecaca',
+                      borderRadius: 5, padding: '12px 16px'
+                    }}
+                  >
+                    ✗ {error}
+                  </motion.div>
+                )}
+
+                {success && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      color: '#10b981', fontSize: 13,
+                      backgroundColor: '#f0fdf4',
+                      border: '1px solid #bbf7d0',
+                      borderRadius: 5, padding: '12px 16px'
+                    }}
+                  >
+                    ✓ {success}
+                  </motion.div>
+                )}
+
+                <motion.button
+                  type="submit"
+                  disabled={loading}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  style={{
+                    width: '100%',
+                    background: loading ? '#94a3b8' : 'linear-gradient(135deg, #10b981, #059669)',
+                    color: 'white',
+                    fontWeight: 700,
+                    fontSize: 15,
+                    padding: '15px',
+                    borderRadius: 5,
+                    border: 'none',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    boxShadow: loading ? 'none' : '0 4px 20px rgba(16,185,129,0.3)',
+                    marginTop: 8,
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {loading ? 'Loading...' : isLogin ? 'Sign in →' : 'Create account →'}
+                </motion.button>
               </div>
-            )}
+            </form>
 
-            <div>
-              <label className="block text-gray-400 text-sm mb-1 font-mono">email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white font-mono text-sm focus:outline-none focus:border-green-500 transition-colors"
-                placeholder="user@example.com"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-400 text-sm mb-1 font-mono">password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white font-mono text-sm focus:outline-none focus:border-green-500 transition-colors"
-                placeholder="••••••••"
-              />
-            </div>
-
-            {error && (
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-red-400 text-sm font-mono bg-red-950/30 border border-red-900 rounded-lg px-3 py-2"
+            <div style={{ marginTop: 28, textAlign: 'center' }}>
+              <button
+                onClick={() => { setIsLogin(!isLogin); setError(''); setSuccess('') }}
+                style={{
+                  background: 'none', border: 'none',
+                  color: '#64748b', fontSize: 14, cursor: 'pointer',
+                  transition: 'color 0.2s'
+                }}
+                onMouseEnter={e => e.currentTarget.style.color = '#10b981'}
+                onMouseLeave={e => e.currentTarget.style.color = '#64748b'}
               >
-                ✗ {error}
-              </motion.p>
-            )}
-
-            {success && (
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-green-400 text-sm font-mono bg-green-950/30 border border-green-900 rounded-lg px-3 py-2"
-              >
-                ✓ {success}
-              </motion.p>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-green-500 hover:bg-green-400 disabled:bg-green-900 disabled:text-green-700 text-black font-semibold py-2.5 rounded-lg transition-colors font-mono text-sm"
-            >
-              {loading ? 'Loading...' : isLogin ? '$ login' : '$ register'}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => { setIsLogin(!isLogin); setError(''); setSuccess('') }}
-              className="text-gray-500 hover:text-green-400 text-sm transition-colors font-mono"
-            >
-              {isLogin ? '> No account? Register here' : '> Already have an account? Login'}
-            </button>
+                {isLogin ? "Don't have an account? Register" : 'Already have an account? Sign in'}
+              </button>
+            </div>
           </div>
         </div>
 
-        <p className="text-center text-gray-600 text-xs mt-4 font-mono">
+        <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: 13, marginTop: 24 }}>
           ENSA Berrechid • Technologies Web 2025-2026
         </p>
       </motion.div>

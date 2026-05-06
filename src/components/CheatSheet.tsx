@@ -34,101 +34,90 @@ export default function CheatSheet({ onClose }: CheatSheetProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-slate-200/60 backdrop-blur-md z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
+      {/* Learning Poster Style Card */}
       <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
+        initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
+        exit={{ scale: 0.9, opacity: 0 }}
         onClick={e => e.stopPropagation()}
-        className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-3xl max-h-[85vh] overflow-hidden shadow-2xl"
+        className="relative bg-white shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden rounded-lg border-8 border-white"
       >
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
-          <div className="flex items-center gap-3">
-            <div className="flex gap-1.5">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <div className="w-3 h-3 rounded-full bg-green-500" />
-            </div>
-            <span className="text-white font-semibold font-mono">cheat-sheet.txt</span>
-          </div>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-white transition-colors text-xl"
-          >
-            ✕
-          </button>
-        </div>
+        {/* Top Accent Bar */}
+        <div className="h-4 w-full bg-sky-300" />
 
-        <div className="overflow-y-auto p-6 space-y-6">
-          {/* Commands table */}
-          <div>
-            <h3 className="text-green-400 font-mono text-sm font-semibold mb-3">
-              # Available Commands
-            </h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm font-mono">
-                <thead>
-                  <tr className="text-gray-500 text-xs border-b border-gray-800">
-                    <th className="text-left py-2 pr-4">COMMAND</th>
-                    <th className="text-left py-2 pr-4">USAGE</th>
-                    <th className="text-left py-2 pr-4">DESCRIPTION</th>
-                    <th className="text-left py-2">EXAMPLE</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {commands.map((c, i) => (
-                    <tr
-                      key={c.cmd}
-                      className={`border-b border-gray-800/50 ${i % 2 === 0 ? 'bg-gray-800/20' : ''}`}
-                    >
-                      <td className="py-2 pr-4 text-green-400 font-semibold">{c.cmd}</td>
-                      <td className="py-2 pr-4 text-yellow-300">{c.usage}</td>
-                      <td className="py-2 pr-4 text-gray-400">{c.desc}</td>
-                      <td className="py-2 text-blue-300">{c.example}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+        <div className="overflow-y-auto px-12 py-10 flex flex-col items-center">
+          
+          {/* Pedagogical Title */}
+          <h2 className="text-slate-700 font-bold text-4xl mb-2 tracking-tight text-center font-sans">
+            MY FIRST TERMINAL
+          </h2>
+          <p className="text-sky-500 font-bold uppercase text-xs tracking-[0.2em] mb-10">Linux Survival Guide</p>
+
+          {/* Commands Grid - Learning Colors */}
+          <div className="grid grid-cols-2 gap-x-10 gap-y-6 w-full mb-12">
+            {commands.map((c, i) => {
+              const colors = ['bg-sky-100 text-sky-600', 'bg-emerald-100 text-emerald-600', 'bg-amber-100 text-amber-600', 'bg-rose-100 text-rose-600'];
+              const currentColor = colors[i % colors.length];
+              
+              return (
+                <div key={c.cmd} className="flex flex-col group">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-lg ${currentColor} flex items-center justify-center font-bold text-lg font-serif shadow-sm`}>
+                      {c.cmd.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="text-slate-800 font-mono font-black text-lg underline decoration-sky-200 decoration-4 underline-offset-2">
+                      {c.cmd}
+                    </span>
+                  </div>
+                  <p className="text-slate-500 text-xs font-semibold mt-2 leading-tight">
+                    {c.desc}
+                  </p>
+                  <code className="text-slate-400 text-[10px] mt-1 font-mono italic">
+                    Example: {c.example}
+                  </code>
+                </div>
+              );
+            })}
           </div>
 
-          {/* Keyboard shortcuts */}
-          <div>
-            <h3 className="text-green-400 font-mono text-sm font-semibold mb-3">
-              # Keyboard Shortcuts
+          {/* Shortcuts Sticky Note Style */}
+          <div className="w-full bg-yellow-50/50 border-2 border-dashed border-yellow-200 p-6 rounded-2xl">
+            <h3 className="text-yellow-700 font-bold text-sm uppercase tracking-widest mb-4 text-center">
+              Magic Shortcuts
             </h3>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-4">
               {shortcuts.map(s => (
-                <div
-                  key={s.key}
-                  className="flex items-center gap-3 bg-gray-800/50 rounded-lg px-3 py-2"
-                >
-                  <kbd className="bg-gray-700 text-yellow-300 text-xs px-2 py-1 rounded font-mono whitespace-nowrap">
+                <div key={s.key} className="flex flex-col items-center">
+                  <span className="bg-white px-2 py-1 rounded shadow-sm text-slate-700 font-mono text-sm font-bold border border-yellow-100 mb-1">
                     {s.key}
-                  </kbd>
-                  <span className="text-gray-400 text-xs">{s.desc}</span>
+                  </span>
+                  <span className="text-slate-500 text-[10px] font-bold uppercase">{s.desc}</span>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Tips */}
-          <div className="bg-green-950/20 border border-green-900 rounded-lg p-4">
-            <h3 className="text-green-400 font-mono text-sm font-semibold mb-2">
-              💡 Pro Tips
-            </h3>
-            <ul className="space-y-1 text-gray-400 text-xs font-mono">
-              <li>• Use <span className="text-yellow-300">~</span> as a shortcut for <span className="text-yellow-300">/home/user</span></li>
-              <li>• Use <span className="text-yellow-300">..</span> to go up one directory level</li>
-              <li>• Use <span className="text-yellow-300">Tab</span> to autocomplete — saves time!</li>
-              <li>• Use <span className="text-yellow-300">ls -la</span> to see all files including hidden ones</li>
-              <li>• Complete missions in order — each one unlocks the next</li>
-            </ul>
-          </div>
         </div>
+
+        {/* Footer Label */}
+        <div className="h-10 w-full bg-slate-50 border-t border-slate-100 flex items-center justify-between px-6">
+             <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+               ENSA Berrechid • Computer Engineering
+             </span>
+             <span className="text-sky-400 text-[10px] font-black uppercase">
+               Hajar Mazouzi
+             </span>
+        </div>
+
+        {/* Close Button Style "Eraser" */}
+        <button 
+          onClick={onClose}
+          className="absolute top-6 right-6 bg-rose-100 text-rose-500 hover:bg-rose-500 hover:text-white w-8 h-8 rounded-full transition-all flex items-center justify-center font-bold"
+        >
+          ✕
+        </button>
       </motion.div>
     </motion.div>
   )

@@ -228,7 +228,13 @@ export default function CoursePage({ onGoHome, onNavigate }: CoursePageProps) {
           </div>
           <span style={{ color: 'white', fontWeight: 800, fontSize: 17 }}>TermiLearn</span>
         </div>
-        <p style={{ color: '#94a3b8', fontSize: 13 }}>ENSA Berrechid • Technologies Web 2025-2026 • Pr. Ilhame Ait Lbachir</p>
+        {/* Infos Académiques & Copyright */}
+      <div style={{ borderTop: '1px solid #1e293b', paddingTop: 24, width: '100%', textAlign: 'center' }}>
+        <p style={{ color: '#64748b', fontSize: 12, marginBottom: 6 }}>
+          © 2026 TermiLearn • Engineered by <strong>Hajar MAZOUZI</strong>
+        </p>
+       
+      </div>
       </footer>
     </div>
   )
