@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import { FiGithub, FiLinkedin, FiGlobe } from 'react-icons/fi';
-import { SiNetlify } from 'react-icons/si';
+
 
 interface HomePageProps {
   userId: string

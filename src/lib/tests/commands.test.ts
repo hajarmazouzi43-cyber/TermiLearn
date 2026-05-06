@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { parseCommand, resolvePath } from '../commands'
 import { executeLS, executeCD, executePWD, executeMKDIR, executeTOUCH, executeRM, executeCAT, executeECHO, executeWHOAMI, executeCLEAR, executeHELP, executeHISTORY,executeCP,executeMV } from '../commands'
 import type { VirtualNode, OutputLine } from '../../types'
+import { vi } from 'vitest';
 
 describe('parseCommand', () => {
   it('parses a simple command', () => {
@@ -108,7 +109,7 @@ const createCtx = (overrides = {}) => {
     filesystem: mockFS,
     cwd: '/home/user',
     userId: 'test-user',
-    setFilesystem: vi.fn(),
+    setFilesystem:vi.fn(),
     setCwd: vi.fn(),
     addOutput: vi.fn((line: Omit<OutputLine, 'id'>) => outputs.push(line)),
     clearOutput: vi.fn(),

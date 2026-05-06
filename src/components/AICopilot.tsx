@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 interface Message {
   id: string
@@ -102,11 +102,11 @@ const sendMessage = async (text: string) => {
       text: reply
     }])
 
-  } catch (error:unknown) {
+  } catch (error:any) {
     setMessages(prev => [...prev, {
       id: (Date.now() + 1).toString(),
       role: 'assistant',
-      text: `❌ Error: ${error.message}`
+      text: `❌ Error: ${error.message|| "An unknown error occurred"}`
     }])
   } finally {
     setLoading(false)
