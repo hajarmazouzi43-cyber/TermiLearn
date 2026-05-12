@@ -24,8 +24,8 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
   const [showCopilot, setShowCopilot] = useState(false)
   const [showQuiz, setShowQuiz] = useState(false)
   const [completedMissions, setCompletedMissions] = useState<number[]>([])
-  const [resetting, setResetting] = useState(false)
-  const { setFilesystem, resetShell, cwd } = useShellStore()
+  // const [resetting, setResetting] = useState(false)
+  const { setFilesystem, cwd } = useShellStore()
 
   useEffect(() => {
     const init = async () => {
@@ -45,19 +45,8 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
       }
     }
     init()
-  }, [userId])
+  }, [setFilesystem, userId])
 
-  const handleReset = async () => {
-    if (!confirm('Reset your filesystem to default? This cannot be undone.')) return
-    setResetting(true)
-    try {
-      const fs = await resetFilesystem(userId)
-      setFilesystem(fs)
-      resetShell()
-    } finally {
-      setResetting(false)
-    }
-  }
 
   const handleMissionComplete = (missionId: number) => {
     setCompletedMissions(prev => [...prev, missionId])
@@ -164,7 +153,6 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
       style={{
         padding: '8px 18px',
         borderRadius: 40,
-        border: 'none',
         backgroundColor: showMissions ? '#fef3c7' : '#ffffff',
         border: showMissions ? 'none' : '1px solid #e2e8f0',
         color: showMissions ? '#b45309' : '#5c6f87',
@@ -211,7 +199,7 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
       style={{
         padding: '8px 18px',
         borderRadius: 40,
-        border: 'none',
+    
         backgroundColor: showQuiz ? '#dcfce7' : '#ffffff',
         border: showQuiz ? 'none' : '1px solid #e2e8f0',
         color: showQuiz ? '#166534' : '#5c6f87',
@@ -274,7 +262,7 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
       style={{
         padding: '8px 18px',
         borderRadius: 40,
-        border: 'none',
+        
         backgroundColor: showCopilot ? '#f3e8ff' : '#ffffff',
         border: showCopilot ? 'none' : '1px solid #e2e8f0',
         color: showCopilot ? '#6b21a5' : '#5c6f87',

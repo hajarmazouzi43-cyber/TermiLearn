@@ -312,7 +312,6 @@ export default function HomePage({ userId, userEmail, onNavigate }: HomePageProp
                   }
                 }}
               >
-                <span style={{ fontSize: 16 }}>{item.icon}</span>
                 {item.label}
               </button>
             )

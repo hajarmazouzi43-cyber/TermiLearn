@@ -110,7 +110,7 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
   const [selected, setSelected] = useState<number | null>(null)
   const [confirmed, setConfirmed] = useState(false)
   const [score, setScore] = useState(0)
-  const [answers, setAnswers] = useState<boolean[]>([])
+  const [ setAnswers] = useState<boolean[]>([])
   const [finished, setFinished] = useState(false)
   const [userName, setUserName] = useState('')
 
