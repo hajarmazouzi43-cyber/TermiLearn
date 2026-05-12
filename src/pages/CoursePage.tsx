@@ -50,46 +50,159 @@ export default function CoursePage({ onGoHome, onNavigate }: CoursePageProps) {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', fontFamily: "'Segoe UI', Arial, sans-serif" }}>
+{/* NAVBAR STYLÉE SANS ICÔNES - COURSE PAGE */}
+<nav style={{
+  position: 'sticky',
+  top: 12,
+  zIndex: 50,
+  width: 'calc(100% - 32px)',
+  margin: '0 16px',
+  backgroundColor: 'rgba(255,255,255,0.92)',
+  backdropFilter: 'blur(12px)',
+  borderRadius: 60,
+  boxShadow: '0 4px 20px rgba(0,0,0,0.03), 0 0 0 1px rgba(0,0,0,0.02)',
+  padding: '0 20px',
+  height: 64,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  fontFamily: "'Inter', system-ui, sans-serif"
+}}>
+  {/* Logo + Home */}
+  <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }} onClick={onGoHome}>
+    <div style={{
+      width: 38, height: 38,
+      background: 'linear-gradient(135deg, #10b981, #3b82f6)',
+      borderRadius: 12,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      boxShadow: '0 6px 14px rgba(16,185,129,0.25)'
+    }}>
+      <span style={{ color: 'white', fontWeight: 800, fontSize: 14, fontFamily: 'monospace' }}>$_</span>
+    </div>
+    <span style={{ fontWeight: 700, fontSize: 18, color: '#0a2540' }}>TermiLearn</span>
+  </div>
 
-      {/* NAVBAR */}
-      <nav style={{ backgroundColor: 'white', borderBottom: '1px solid #e2e8f0', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <button onClick={onGoHome}
-              style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', color: '#64748b', fontWeight: 600, fontSize: 15 }}
-              onMouseEnter={e => e.currentTarget.style.color = '#10b981'}
-              onMouseLeave={e => e.currentTarget.style.color = '#64748b'}
-            >
-              ← Home
-            </button>
-            <div style={{ width: 1, height: 24, backgroundColor: '#e2e8f0' }} />
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <div style={{ width: 34, height: 34, backgroundColor: '#3b82f6', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontSize: 18 }}>📚</span>
-              </div>
-              <span style={{ fontWeight: 800, fontSize: 18, color: '#0f172a' }}>Command Course</span>
-            </div>
-          </div>
+  {/* Liens centraux */}
+  <div style={{ display: 'flex', alignItems: 'center', gap: 6, backgroundColor: '#f8fafc', padding: '4px', borderRadius: 60 }}>
+    <button
+      onClick={onGoHome}
+      style={{
+        background: 'transparent',
+        border: 'none',
+        color: '#4a5b6e',
+        cursor: 'pointer',
+        fontSize: 14,
+        fontWeight: 500,
+        padding: '8px 24px',
+        borderRadius: 40,
+        transition: 'all 0.2s ease',
+        fontFamily: 'inherit'
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.backgroundColor = '#ffffff'
+        e.currentTarget.style.color = '#10b981'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.backgroundColor = 'transparent'
+        e.currentTarget.style.color = '#4a5b6e'
+      }}
+    >
+      Home
+    </button>
 
-          <div style={{ display: 'flex', gap: 12 }}>
-            <button onClick={() => onNavigate('terminal')}
-              style={{ padding: '8px 18px', borderRadius: 10, border: 'none', backgroundColor: '#10b981', color: 'white', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}
-            >🖥️ Open Terminal</button>
-            <button onClick={() => onNavigate('missions')}
-              style={{ padding: '8px 18px', borderRadius: 10, border: 'none', backgroundColor: '#f59e0b', color: 'white', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}
-            >🎯 Test Knowledge</button>
-            <button onClick={() => supabase.auth.signOut()}
-              style={{ padding: '8px 18px', borderRadius: 10, border: '2px solid #e2e8f0', background: 'white', color: '#64748b', fontWeight: 600, fontSize: 14, cursor: 'pointer' }}
-            >Sign out</button>
-          </div>
-        </div>
-      </nav>
+    <button
+      onClick={() => onNavigate('terminal')}
+      style={{
+        background: '#10b981',
+        border: 'none',
+        color: 'white',
+        cursor: 'pointer',
+        fontSize: 14,
+        fontWeight: 600,
+        padding: '8px 24px',
+        borderRadius: 40,
+        transition: 'all 0.2s ease',
+        fontFamily: 'inherit',
+        boxShadow: '0 2px 8px rgba(16,185,129,0.25)'
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.backgroundColor = '#059669'
+        e.currentTarget.style.transform = 'translateY(-1px)'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.backgroundColor = '#10b981'
+        e.currentTarget.style.transform = 'translateY(0)'
+      }}
+    >
+      Open Terminal
+    </button>
+
+    <button
+      onClick={() => onNavigate('missions')}
+      style={{
+        background: 'transparent',
+        border: 'none',
+        color: '#4a5b6e',
+        cursor: 'pointer',
+        fontSize: 14,
+        fontWeight: 500,
+        padding: '8px 24px',
+        borderRadius: 40,
+        transition: 'all 0.2s ease',
+        fontFamily: 'inherit'
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.backgroundColor = '#ffffff'
+        e.currentTarget.style.color = '#f59e0b'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.backgroundColor = 'transparent'
+        e.currentTarget.style.color = '#4a5b6e'
+      }}
+    >
+      Test Knowledge
+    </button>
+  </div>
+
+  {/* Sign out */}
+  <button
+    onClick={() => supabase.auth.signOut()}
+    style={{
+      padding: '8px 20px',
+      borderRadius: 40,
+      border: '1px solid #e2e8f0',
+      backgroundColor: 'white',
+      color: '#5c6f87',
+      fontSize: 14,
+      fontWeight: 500,
+      cursor: 'pointer',
+      transition: 'all 0.2s ease',
+      fontFamily: 'inherit'
+    }}
+    onMouseEnter={e => {
+      e.currentTarget.style.borderColor = '#fecaca'
+      e.currentTarget.style.backgroundColor = '#fff5f5'
+      e.currentTarget.style.color = '#ef4444'
+      e.currentTarget.style.transform = 'translateY(-1px)'
+    }}
+    onMouseLeave={e => {
+      e.currentTarget.style.borderColor = '#e2e8f0'
+      e.currentTarget.style.backgroundColor = 'white'
+      e.currentTarget.style.color = '#5c6f87'
+      e.currentTarget.style.transform = 'translateY(0)'
+    }}
+  >
+    Sign out
+  </button>
+</nav>
 
       {/* HERO */}
       <section style={{ background: 'linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%)', padding: '56px 24px', textAlign: 'center' }}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 style={{ fontSize: 44, fontWeight: 900, color: '#0f172a', marginBottom: 12 }}>
-            📖 Linux Command Course
+             Linux Command Course
           </h1>
           <p style={{ color: '#64748b', fontSize: 17, marginBottom: 32 }}>
             Learn all 14 essential commands — click any card to see details and try it live
@@ -199,7 +312,7 @@ export default function CoursePage({ onGoHome, onNavigate }: CoursePageProps) {
                     <button
                       onClick={e => { e.stopPropagation(); onNavigate('terminal') }}
                       style={{ width: '100%', padding: 11, borderRadius: 10, border: 'none', backgroundColor: s.text, color: 'white', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
-                    >🖥️ Try "{cmd.cmd}" in Terminal →</button>
+                    > Try "{cmd.cmd}" in Terminal →</button>
                   </motion.div>
                 )}
               </motion.div>

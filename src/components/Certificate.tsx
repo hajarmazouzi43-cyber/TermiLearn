@@ -35,7 +35,7 @@ const CertificateGenerator = ({ userName, score }: CertificateProps) => {
     doc.setFontSize(35);
     doc.setFont("times", "italic");
     doc.setTextColor(22, 160, 133); // Un vert émeraude
-    doc.text(userName, 148.5, 105, { align: "center" });
+    doc.text(userName||"Student",148.5, 105, { align: "center" });
 
     // Description du succès
     doc.setFontSize(18);

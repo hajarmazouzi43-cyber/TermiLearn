@@ -54,21 +54,47 @@ export default function MissionPanel({ userId, completedMissions, onMissionCompl
   }
 
   return (
-    <div className="flex flex-col h-full bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+    <div style={{
+      backgroundColor: '#ffffff',
+      borderRadius: 24,
+      boxShadow: '0 8px 24px rgba(0,0,0,0.05)',
+      border: '1px solid #eef2f6',
+      overflow: 'hidden',
+      fontFamily: "'Inter', system-ui, sans-serif"
+    }}>
       {/* Header */}
-      <div className="flex items-center gap-2 px-4 py-3 bg-gray-900 border-b border-gray-800">
-        <span className="text-yellow-400 text-sm">🎯</span>
-        <span className="text-white text-sm font-semibold">Missions</span>
-        <span className="ml-auto text-xs text-gray-500 font-mono">
-          {completedMissions.length}/{MISSIONS.length} completed
-        </span>
+      <div style={{
+        padding: '20px 24px',
+        borderBottom: '1px solid #eef2f6',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#fafcff'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+         
+          <div>
+            <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0, color: '#0a2540' }}>Missions</h2>
+            <p style={{ fontSize: 13, margin: '4px 0 0', color: '#5c6f87' }}>Validate your Linux skills</p>
+          </div>
+        </div>
+        <div style={{
+          backgroundColor: '#eef2ff',
+          padding: '6px 14px',
+          borderRadius: 40,
+          fontSize: 13,
+          fontWeight: 600,
+          color: '#2563eb'
+        }}>
+          {completedMissions.length}/{MISSIONS.length} complétées
+        </div>
       </div>
 
       {/* Progress bar */}
-      <div className="px-4 py-2 border-b border-gray-800">
-        <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+      <div style={{ padding: '8px 24px', backgroundColor: '#ffffff' }}>
+        <div style={{ height: 6, backgroundColor: '#e2e8f0', borderRadius: 10, overflow: 'hidden' }}>
           <motion.div
-            className="h-full bg-green-500 rounded-full"
+            style={{ height: '100%', backgroundColor: '#22c55e', borderRadius: 10 }}
             initial={{ width: 0 }}
             animate={{ width: `${(completedMissions.length / MISSIONS.length) * 100}%` }}
             transition={{ duration: 0.5 }}
@@ -77,14 +103,14 @@ export default function MissionPanel({ userId, completedMissions, onMissionCompl
       </div>
 
       {/* Mission list */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2">
+      <div style={{ padding: '16px 24px 24px', display: 'flex', flexDirection: 'column', gap: 12 }}>
         {MISSIONS.map((mission) => {
           const { completed, locked } = getMissionProgress(mission.id, completedMissions)
           const isActive = activeMission === mission.id
 
           return (
             <div key={mission.id}>
-              <button
+              <div
                 onClick={() => {
                   if (!locked) {
                     setActiveMission(isActive ? null : mission.id)
@@ -92,102 +118,180 @@ export default function MissionPanel({ userId, completedMissions, onMissionCompl
                     setFeedback('')
                   }
                 }}
-                className={`w-full text-left px-3 py-2.5 rounded-lg border transition-all text-sm
-                  ${completed
-                    ? 'border-green-800 bg-green-950/30 text-green-400'
+                style={{
+                  padding: '16px 18px',
+                  borderRadius: 20,
+                  backgroundColor: completed
+                    ? '#f0fdf4'
                     : locked
-                    ? 'border-gray-800 bg-gray-800/30 text-gray-600 cursor-not-allowed'
+                    ? '#f8fafc'
                     : isActive
-                    ? 'border-yellow-600 bg-yellow-950/20 text-white'
-                    : 'border-gray-700 bg-gray-800/50 text-gray-300 hover:border-gray-600'
-                  }`}
+                    ? '#eff6ff'
+                    : '#ffffff',
+                  border: locked
+                    ? '1px solid #e9eef3'
+                    : isActive
+                    ? '2px solid #3b82f6'
+                    : '1px solid #eef2f6',
+                  cursor: locked ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s ease',
+                  opacity: locked ? 0.6 : 1,
+                  boxShadow: isActive ? '0 4px 12px rgba(59,130,246,0.08)' : 'none'
+                }}
               >
-                <div className="flex items-center gap-2">
-                  <span className="text-base">
-                    {completed ? '✅' : locked ? '🔒' : isActive ? '▶' : '○'}
-                  </span>
-                  <span className="font-mono font-medium">{mission.title}</span>
-                </div>
-              </button>
-
-              {/* Expanded mission */}
-              <AnimatePresence>
-                {isActive && !locked && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="mt-1 p-3 bg-gray-800/50 rounded-lg border border-gray-700 space-y-3">
-                      {/* Description */}
-                      <p className="text-gray-300 text-xs leading-relaxed">
-                        {mission.description}
-                      </p>
-
-                      {/* Hint */}
-                      <AnimatePresence>
-                        {hintLevel > 0 && (
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="bg-yellow-950/30 border border-yellow-800 rounded px-3 py-2"
-                          >
-                            <p className="text-yellow-300 text-xs font-mono">
-                              💡 {getHint(mission)}
-                            </p>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-
-                      {/* Feedback */}
-                      <AnimatePresence>
-                        {feedback === 'success' && (
-                          <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="bg-green-950/30 border border-green-700 rounded px-3 py-2 text-center"
-                          >
-                            <p className="text-green-400 text-xs font-mono">
-                              🎉 Mission complete! Well done!
-                            </p>
-                          </motion.div>
-                        )}
-                        {feedback === 'error' && (
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="bg-red-950/30 border border-red-800 rounded px-3 py-2"
-                          >
-                            <p className="text-red-400 text-xs font-mono">
-                              ✗ Not yet — keep trying!
-                            </p>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-
-                      {/* Actions */}
-                      <div className="flex gap-2">
-                        {hintLevel < 3 && (
-                          <button
-                            onClick={() => setHintLevel(h => Math.min(h + 1, 3))}
-                            className="flex-1 text-xs py-1.5 rounded border border-yellow-800 text-yellow-400 hover:bg-yellow-950/30 transition-colors font-mono"
-                          >
-                            💡 Hint ({3 - hintLevel} left)
-                          </button>
-                        )}
-                        <button
-                          onClick={() => handleCheck(mission.id)}
-                          disabled={checking}
-                          className="flex-1 text-xs py-1.5 rounded border border-green-700 text-green-400 hover:bg-green-950/30 transition-colors font-mono disabled:opacity-50"
-                        >
-                          {checking ? 'Checking...' : '✓ Check'}
-                        </button>
-                      </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 32,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: completed
+                      ? '#22c55e'
+                      : locked
+                      ? '#e2e8f0'
+                      : isActive
+                      ? '#3b82f6'
+                      : '#f1f5f9',
+                    color: completed || isActive ? 'white' : '#94a3b8',
+                    fontWeight: 600,
+                    fontSize: 14
+                  }}>
+                    {completed ? '✓' : locked ? '🔒' : isActive ? '▶' : `${mission.id}`}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{
+                      fontWeight: 600,
+                      fontSize: 15,
+                      color: completed ? '#15803d' : locked ? '#94a3b8' : '#0f172a',
+                      marginBottom: 4
+                    }}>
+                      {mission.title}
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    <div style={{ fontSize: 13, color: '#64748b', lineHeight: 1.4 }}>
+                      {mission.description}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Expanded mission */}
+                <AnimatePresence>
+                  {isActive && !locked && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #e2e8f0' }}>
+                        {/* Hint */}
+                        <AnimatePresence>
+                          {hintLevel > 0 && (
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              style={{
+                                backgroundColor: '#fffbeb',
+                                padding: '10px 14px',
+                                borderRadius: 14,
+                                border: '1px solid #fde68a',
+                                marginBottom: 12,
+                                fontSize: 13,
+                                color: '#b45309'
+                              }}
+                            >
+                              💡 {getHint(mission)}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+
+                        {/* Feedback */}
+                        <AnimatePresence>
+                          {feedback === 'success' && (
+                            <motion.div
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              style={{
+                                backgroundColor: '#f0fdf4',
+                                padding: '10px 14px',
+                                borderRadius: 14,
+                                border: '1px solid #bbf7d0',
+                                marginBottom: 12,
+                                fontSize: 13,
+                                color: '#15803d',
+                                textAlign: 'center',
+                                fontWeight: 500
+                              }}
+                            >
+                              🎉 Mission validée !
+                            </motion.div>
+                          )}
+                          {feedback === 'error' && (
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              style={{
+                                backgroundColor: '#fef2f2',
+                                padding: '10px 14px',
+                                borderRadius: 14,
+                                border: '1px solid #fecaca',
+                                marginBottom: 12,
+                                fontSize: 13,
+                                color: '#b91c1c',
+                                textAlign: 'center'
+                              }}
+                            >
+                              ✗ Pas encore – réessaie !
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+
+                        {/* Actions */}
+                        <div style={{ display: 'flex', gap: 10 }}>
+                          {hintLevel < 3 && (
+                            <button
+                              onClick={() => setHintLevel(h => Math.min(h + 1, 3))}
+                              style={{
+                                flex: 1,
+                                padding: '10px 0',
+                                borderRadius: 40,
+                                border: '1px solid #fcd34d',
+                                backgroundColor: '#fffbeb',
+                                color: '#d97706',
+                                fontSize: 13,
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                fontFamily: 'inherit'
+                              }}
+                            >
+                              💡 Indice ({3 - hintLevel} restant)
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleCheck(mission.id)}
+                            disabled={checking}
+                            style={{
+                              flex: 1,
+                              padding: '10px 0',
+                              borderRadius: 40,
+                              border: 'none',
+                              backgroundColor: checking ? '#cbd5e1' : '#3b82f6',
+                              color: 'white',
+                              fontSize: 13,
+                              fontWeight: 600,
+                              cursor: checking ? 'not-allowed' : 'pointer',
+                              fontFamily: 'inherit'
+                            }}
+                          >
+                            {checking ? 'Vérification...' : '✓ Vérifier'}
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           )
         })}

@@ -37,45 +37,51 @@ export default function CheatSheet({ onClose }: CheatSheetProps) {
       className="fixed inset-0 bg-slate-200/60 backdrop-blur-md z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
-      {/* Learning Poster Style Card */}
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         onClick={e => e.stopPropagation()}
-        className="relative bg-white shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden rounded-lg border-8 border-white"
+        className="relative bg-white shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden rounded-lg border-8 border-white"
       >
         {/* Top Accent Bar */}
         <div className="h-4 w-full bg-sky-300" />
 
-        <div className="overflow-y-auto px-12 py-10 flex flex-col items-center">
+        <div className="overflow-y-auto px-6 py-6 flex flex-col items-center">
           
-          {/* Pedagogical Title */}
-          <h2 className="text-slate-700 font-bold text-4xl mb-2 tracking-tight text-center font-sans">
+          {/* Title */}
+          <h2 className="text-slate-700 font-bold text-3xl mb-1 tracking-tight text-center font-sans">
             MY FIRST TERMINAL
           </h2>
-          <p className="text-sky-500 font-bold uppercase text-xs tracking-[0.2em] mb-10">Linux Survival Guide</p>
+          <p className="text-sky-500 font-bold uppercase text-xs tracking-[0.2em] mb-6">
+            Linux Survival Guide
+          </p>
 
-          {/* Commands Grid - Learning Colors */}
-          <div className="grid grid-cols-2 gap-x-10 gap-y-6 w-full mb-12">
+          {/* Commands Grid - 2 columns, colors preserved */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full mb-8">
             {commands.map((c, i) => {
-              const colors = ['bg-sky-100 text-sky-600', 'bg-emerald-100 text-emerald-600', 'bg-amber-100 text-amber-600', 'bg-rose-100 text-rose-600'];
+              const colors = [
+                'bg-sky-100 text-sky-600',
+                'bg-emerald-100 text-emerald-600',
+                'bg-amber-100 text-amber-600',
+                'bg-rose-100 text-rose-600',
+              ];
               const currentColor = colors[i % colors.length];
               
               return (
-                <div key={c.cmd} className="flex flex-col group">
+                <div key={c.cmd} className="flex flex-col p-3 border border-gray-100 rounded-xl hover:shadow-md transition">
                   <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-lg ${currentColor} flex items-center justify-center font-bold text-lg font-serif shadow-sm`}>
+                    <div className={`w-8 h-8 rounded-lg ${currentColor} flex items-center justify-center font-bold text-base font-serif shadow-sm flex-shrink-0`}>
                       {c.cmd.charAt(0).toUpperCase()}
                     </div>
-                    <span className="text-slate-800 font-mono font-black text-lg underline decoration-sky-200 decoration-4 underline-offset-2">
+                    <span className="text-slate-800 font-mono font-bold text-base">
                       {c.cmd}
                     </span>
                   </div>
-                  <p className="text-slate-500 text-xs font-semibold mt-2 leading-tight">
+                  <p className="text-slate-500 text-xs font-semibold mt-2 leading-tight ml-11">
                     {c.desc}
                   </p>
-                  <code className="text-slate-400 text-[10px] mt-1 font-mono italic">
+                  <code className="text-slate-400 text-[11px] mt-1 font-mono italic ml-11 break-words whitespace-normal">
                     Example: {c.example}
                   </code>
                 </div>
@@ -83,35 +89,35 @@ export default function CheatSheet({ onClose }: CheatSheetProps) {
             })}
           </div>
 
-          {/* Shortcuts Sticky Note Style */}
-          <div className="w-full bg-yellow-50/50 border-2 border-dashed border-yellow-200 p-6 rounded-2xl">
-            <h3 className="text-yellow-700 font-bold text-sm uppercase tracking-widest mb-4 text-center">
+          {/* Shortcuts Section - Sticky Note Style */}
+          <div className="w-full bg-yellow-50/50 border-2 border-dashed border-yellow-200 p-5 rounded-2xl">
+            <h3 className="text-yellow-700 font-bold text-sm uppercase tracking-widest mb-3 text-center">
               Magic Shortcuts
             </h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {shortcuts.map(s => (
-                <div key={s.key} className="flex flex-col items-center">
-                  <span className="bg-white px-2 py-1 rounded shadow-sm text-slate-700 font-mono text-sm font-bold border border-yellow-100 mb-1">
+                <div key={s.key} className="flex flex-col items-center text-center">
+                  <span className="bg-white px-2 py-1 rounded shadow-sm text-slate-700 font-mono text-xs font-bold border border-yellow-100">
                     {s.key}
                   </span>
-                  <span className="text-slate-500 text-[10px] font-bold uppercase">{s.desc}</span>
+                  <span className="text-slate-500 text-[10px] font-bold uppercase mt-1">{s.desc}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Footer Label */}
+        {/* Footer */}
         <div className="h-10 w-full bg-slate-50 border-t border-slate-100 flex items-center justify-between px-6">
-             <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">
-               ENSA Berrechid • Computer Engineering
-             </span>
-             <span className="text-sky-400 text-[10px] font-black uppercase">
-               Hajar Mazouzi
-             </span>
+          <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+            ENSA Berrechid • Computer Engineering
+          </span>
+          <span className="text-sky-400 text-[10px] font-black uppercase">
+            Hajar Mazouzi
+          </span>
         </div>
 
-        {/* Close Button Style "Eraser" */}
+        {/* Close Button */}
         <button 
           onClick={onClose}
           className="absolute top-6 right-6 bg-rose-100 text-rose-500 hover:bg-rose-500 hover:text-white w-8 h-8 rounded-full transition-all flex items-center justify-center font-bold"

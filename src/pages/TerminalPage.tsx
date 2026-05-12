@@ -77,66 +77,291 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', fontFamily: "'Segoe UI', Arial, sans-serif" }}>
 
-      {/* NAVBAR */}
-      <nav style={{ backgroundColor: 'white', borderBottom: '1px solid #e2e8f0', padding: '0 24px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 40 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          {onGoHome && (
-            <button onClick={onGoHome}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', color: '#64748b', fontWeight: 600, fontSize: 14, cursor: 'pointer', padding: '6px 10px', borderRadius: 8 }}
-              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#f1f5f9'; e.currentTarget.style.color = '#0f172a' }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#64748b' }}
-            >← Home</button>
-          )}
-          <div style={{ width: 1, height: 24, backgroundColor: '#e2e8f0' }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 34, height: 34, backgroundColor: '#0f172a', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ color: '#10b981', fontWeight: 800, fontSize: 12, fontFamily: 'monospace' }}>$_</span>
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: 15, color: '#0f172a' }}>TermiLearn</div>
-              <div style={{ fontSize: 11, color: '#94a3b8' }}>Linux Terminal</div>
-            </div>
-          </div>
-        </div>
+{/* NAVBAR STYLÉE - TERMINAL PAGE */}
+<nav style={{
+  position: 'sticky',
+  top: 12,
+  zIndex: 50,
+  width: 'calc(100% - 32px)',
+  margin: '0 16px',
+  backgroundColor: 'rgba(255,255,255,0.96)',
+  backdropFilter: 'blur(12px)',
+  borderRadius: 60,
+  boxShadow: '0 4px 20px rgba(0,0,0,0.03), 0 0 0 1px rgba(0,0,0,0.02)',
+  padding: '0 20px',
+  height: 64,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  fontFamily: "'Inter', system-ui, sans-serif"
+}}>
+  
+  {/* Logo + Titre */}
+  <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={onGoHome}>
+    <div style={{
+      width: 38, height: 38,
+      background: 'linear-gradient(135deg, #10b981, #3b82f6)',
+      borderRadius: 12,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      boxShadow: '0 6px 14px rgba(16,185,129,0.25)'
+    }}>
+      <span style={{ color: 'white', fontWeight: 800, fontSize: 14, fontFamily: 'monospace' }}>$_</span>
+    </div>
+    <div>
+      <div style={{ fontWeight: 700, fontSize: 16, color: '#0a2540' }}>TermiLearn</div>
+      <div style={{ fontSize: 11, color: '#5c6f87' }}>Linux Terminal</div>
+    </div>
+  </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 20, padding: '5px 14px' }}>
-          <div style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: '#10b981' }} />
-          <span style={{ fontSize: 12, color: '#16a34a', fontWeight: 600 }}>Environment ready</span>
-        </div>
+  {/* Statut environment */}
+  <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: '#f0fdf4',
+    border: '1px solid #bbf7d0',
+    borderRadius: 40,
+    padding: '6px 16px'
+  }}>
+    <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#10b981' }} />
+    <span style={{ fontSize: 12, color: '#15803d', fontWeight: 600 }}>Environment ready</span>
+  </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <button onClick={() => setShowTerminalModal(true)}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 9, border: 'none', backgroundColor: '#0f172a', color: '#10b981', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'monospace' }}
-          >Terminal</button>
+  {/* Boutons d'action */}
+  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+    {/* Terminal - bleu foncé */}
+    <button
+      onClick={() => setShowTerminalModal(true)}
+      style={{
+        padding: '8px 18px',
+        borderRadius: 40,
+        border: 'none',
+        backgroundColor: '#0f172a',
+        color: '#10b981',
+        fontWeight: 600,
+        fontSize: 13,
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        transition: 'all 0.2s ease'
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.backgroundColor = '#1e293b'
+        e.currentTarget.style.transform = 'translateY(-1px)'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.backgroundColor = '#0f172a'
+        e.currentTarget.style.transform = 'translateY(0)'
+      }}
+    >
+      Terminal
+    </button>
 
-          <button onClick={() => { setShowMissions(m => !m); setShowQuiz(false) }}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 9, border: '1.5px solid', fontSize: 13, fontWeight: 700, cursor: 'pointer', backgroundColor: showMissions ? '#fefce8' : 'white', borderColor: showMissions ? '#fde68a' : '#e2e8f0', color: showMissions ? '#b45309' : '#64748b' }}
-          > Missions <span style={{ backgroundColor: completedMissions.length === 5 ? '#10b981' : '#e2e8f0', color: completedMissions.length === 5 ? 'white' : '#64748b', borderRadius: 20, padding: '1px 7px', fontSize: 11 }}>{completedMissions.length}/5</span></button>
+    {/* Missions - ORANGE */}
+    <button
+      onClick={() => { setShowMissions(m => !m); setShowQuiz(false) }}
+      style={{
+        padding: '8px 18px',
+        borderRadius: 40,
+        border: 'none',
+        backgroundColor: showMissions ? '#fef3c7' : '#ffffff',
+        border: showMissions ? 'none' : '1px solid #e2e8f0',
+        color: showMissions ? '#b45309' : '#5c6f87',
+        fontWeight: 600,
+        fontSize: 13,
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        transition: 'all 0.2s ease',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8
+      }}
+      onMouseEnter={e => {
+        if (!showMissions) {
+          e.currentTarget.style.backgroundColor = '#fef3c7'
+          e.currentTarget.style.color = '#b45309'
+          e.currentTarget.style.borderColor = '#fde68a'
+        }
+      }}
+      onMouseLeave={e => {
+        if (!showMissions) {
+          e.currentTarget.style.backgroundColor = '#ffffff'
+          e.currentTarget.style.color = '#5c6f87'
+          e.currentTarget.style.borderColor = '#e2e8f0'
+        }
+      }}
+    >
+      Missions
+      <span style={{
+        backgroundColor: completedMissions.length === 5 ? '#10b981' : '#e2e8f0',
+        color: completedMissions.length === 5 ? 'white' : '#5c6f87',
+        borderRadius: 20,
+        padding: '2px 10px',
+        fontSize: 11,
+        fontWeight: 600
+      }}>
+        {completedMissions.length}/5
+      </span>
+    </button>
 
-          <button onClick={() => { setShowQuiz(q => !q); setShowMissions(false) }}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 9, border: '1.5px solid', fontSize: 13, fontWeight: 700, cursor: 'pointer', backgroundColor: showQuiz ? '#f0fdf4' : 'white', borderColor: showQuiz ? '#bbf7d0' : '#e2e8f0', color: showQuiz ? '#059669' : '#64748b' }}
-          > Quiz</button>
+    {/* Quiz - VERT */}
+    <button
+      onClick={() => { setShowQuiz(q => !q); setShowMissions(false) }}
+      style={{
+        padding: '8px 18px',
+        borderRadius: 40,
+        border: 'none',
+        backgroundColor: showQuiz ? '#dcfce7' : '#ffffff',
+        border: showQuiz ? 'none' : '1px solid #e2e8f0',
+        color: showQuiz ? '#166534' : '#5c6f87',
+        fontWeight: 600,
+        fontSize: 13,
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        transition: 'all 0.2s ease'
+      }}
+      onMouseEnter={e => {
+        if (!showQuiz) {
+          e.currentTarget.style.backgroundColor = '#dcfce7'
+          e.currentTarget.style.color = '#166534'
+          e.currentTarget.style.borderColor = '#bbf7d0'
+        }
+      }}
+      onMouseLeave={e => {
+        if (!showQuiz) {
+          e.currentTarget.style.backgroundColor = '#ffffff'
+          e.currentTarget.style.color = '#5c6f87'
+          e.currentTarget.style.borderColor = '#e2e8f0'
+        }
+      }}
+    >
+      Quiz
+    </button>
 
-          <button onClick={() => setShowCheatSheet(true)}
-            style={{ padding: '8px 16px', borderRadius: 9, border: '1.5px solid #e2e8f0', backgroundColor: 'white', color: '#64748b', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
-          > Cheat Sheet</button>
+    {/* Cheat Sheet - BLEU CLAIR */}
+    <button
+      onClick={() => setShowCheatSheet(true)}
+      style={{
+        padding: '8px 18px',
+        borderRadius: 40,
+        border: '1px solid #e2e8f0',
+        backgroundColor: '#ffffff',
+        color: '#5c6f87',
+        fontWeight: 600,
+        fontSize: 13,
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        transition: 'all 0.2s ease'
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.backgroundColor = '#e0f2fe'
+        e.currentTarget.style.color = '#0369a1'
+        e.currentTarget.style.borderColor = '#bae6fd'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.backgroundColor = '#ffffff'
+        e.currentTarget.style.color = '#5c6f87'
+        e.currentTarget.style.borderColor = '#e2e8f0'
+      }}
+    >
+      Cheat Sheet
+    </button>
 
-          <button onClick={() => setShowCopilot(c => !c)}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 9, border: '1.5px solid', fontSize: 13, fontWeight: 700, cursor: 'pointer', backgroundColor: showCopilot ? '#eef2ff' : 'white', borderColor: showCopilot ? '#a5b4fc' : '#e2e8f0', color: showCopilot ? '#6366f1' : '#64748b' }}
-          >🤖 AI Copilot</button>
+    {/* AI Copilot - VIOLET */}
+    <button
+      onClick={() => setShowCopilot(c => !c)}
+      style={{
+        padding: '8px 18px',
+        borderRadius: 40,
+        border: 'none',
+        backgroundColor: showCopilot ? '#f3e8ff' : '#ffffff',
+        border: showCopilot ? 'none' : '1px solid #e2e8f0',
+        color: showCopilot ? '#6b21a5' : '#5c6f87',
+        fontWeight: 600,
+        fontSize: 13,
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        transition: 'all 0.2s ease',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6
+      }}
+      onMouseEnter={e => {
+        if (!showCopilot) {
+          e.currentTarget.style.backgroundColor = '#f3e8ff'
+          e.currentTarget.style.color = '#6b21a5'
+          e.currentTarget.style.borderColor = '#d8b4fe'
+        }
+      }}
+      onMouseLeave={e => {
+        if (!showCopilot) {
+          e.currentTarget.style.backgroundColor = '#ffffff'
+          e.currentTarget.style.color = '#5c6f87'
+          e.currentTarget.style.borderColor = '#e2e8f0'
+        }
+      }}
+    >
+      🤖 AI Copilot
+    </button>
+  </div>
 
-          <button onClick={handleReset} disabled={resetting}
-            style={{ padding: '8px 14px', borderRadius: 9, border: '1.5px solid #e2e8f0', backgroundColor: 'white', color: '#ef4444', fontWeight: 600, fontSize: 13, cursor: 'pointer', opacity: resetting ? 0.5 : 1 }}
-          >{resetting ? '...' : '🔄'}</button>
+  {/* Zone droite utilisateur */}
+  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 10,
+      backgroundColor: '#f8fafc',
+      borderRadius: 40,
+      padding: '5px 16px 5px 12px',
+      border: '1px solid #eef2f6'
+    }}>
+      <div style={{
+        width: 32, height: 32, borderRadius: 32,
+        background: 'linear-gradient(135deg, #10b981, #3b82f6)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: 'white', fontWeight: 700, fontSize: 13,
+        boxShadow: '0 2px 8px rgba(16,185,129,0.2)'
+      }}>
+        {userEmail?.charAt(0).toUpperCase() || 'U'}
+      </div>
+      <span style={{ fontSize: 13, fontWeight: 500, color: '#1e2a3e', maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        {userEmail}
+      </span>
+    </div>
 
-          <div style={{ width: 1, height: 24, backgroundColor: '#e2e8f0' }} />
-          <span style={{ fontSize: 12, color: '#94a3b8', maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{userEmail}</span>
-
-          <button onClick={() => supabase.auth.signOut()}
-            style={{ padding: '7px 14px', borderRadius: 9, border: '1.5px solid #fecaca', backgroundColor: '#fff5f5', color: '#ef4444', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
-          >Sign out</button>
-        </div>
-      </nav>
+    <button
+      onClick={() => supabase.auth.signOut()}
+      style={{
+        padding: '8px 20px',
+        borderRadius: 40,
+        border: '1px solid #e2e8f0',
+        backgroundColor: 'white',
+        color: '#5c6f87',
+        fontSize: 13,
+        fontWeight: 500,
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        fontFamily: 'inherit'
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.borderColor = '#fecaca'
+        e.currentTarget.style.backgroundColor = '#fff5f5'
+        e.currentTarget.style.color = '#ef4444'
+        e.currentTarget.style.transform = 'translateY(-1px)'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.borderColor = '#e2e8f0'
+        e.currentTarget.style.backgroundColor = 'white'
+        e.currentTarget.style.color = '#5c6f87'
+        e.currentTarget.style.transform = 'translateY(0)'
+      }}
+    >
+      Sign out
+    </button>
+  </div>
+</nav>
 
       {/* MAIN CONTENT */}
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '32px 24px', display: 'flex', gap: 24, alignItems: 'flex-start' }}>
@@ -192,7 +417,7 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
               <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
                   <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', marginBottom: 2 }}>📝 Quiz Linux</h2>
-                  <p style={{ fontSize: 12, color: '#94a3b8', margin: 0 }}>15 questions • Progressif • Easy → Hard</p>
+                  <p style={{ fontSize: 12, color: '#94a3b8', margin: 0 }}>15 questions • Progressive • Easy → Hard</p>
                 </div>
                 <button onClick={() => setShowQuiz(false)}
                   style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: 20 }}
@@ -204,7 +429,7 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
           ) : (
             <div style={{ backgroundColor: 'white', borderRadius: 18, padding: 24, border: '1.5px solid #f1f5f9', boxShadow: '0 4px 24px rgba(0,0,0,0.05)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-                <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a' }}>🎯 Missions</h2>
+                <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a' }}> Missions</h2>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button onClick={() => { setShowMissions(false); setShowQuiz(true) }}
                     style={{ padding: '8px 16px', borderRadius: 9, border: '1.5px solid #bbf7d0', backgroundColor: '#f0fdf4', color: '#059669', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
