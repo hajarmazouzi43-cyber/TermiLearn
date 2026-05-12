@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { QUIZ_QUESTIONS, getQuizResult } from '../lib/quiz'
 import { jsPDF } from "jspdf"
 
-// --- COMPOSANT GÉNÉRATEUR DE CERTIFICAT (STYLISÉ) ---
+// --- COMPOSANT GÉNÉRATEUR DE CERTIFICAT ---
 interface CertificateProps {
   userName: string;
   score: number;
@@ -98,7 +98,7 @@ const CertificateGenerator = ({ userName, score }: CertificateProps) => {
         e.currentTarget.style.boxShadow = '0 4px 12px rgba(16,185,129,0.3)'
       }}
     >
-       Download My Certificate (EN)
+      🎓 Download My Certificate (EN)
     </button>
   );
 };
@@ -110,7 +110,7 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
   const [selected, setSelected] = useState<number | null>(null)
   const [confirmed, setConfirmed] = useState(false)
   const [score, setScore] = useState(0)
-  const [ setAnswers] = useState<boolean[]>([])
+  const [answers, setAnswers] = useState<boolean[]>([])
   const [finished, setFinished] = useState(false)
   const [userName, setUserName] = useState('')
 
@@ -126,9 +126,16 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
   const handleConfirm = () => {
     if (selected === null) return
     const isCorrect = selected === question.correct
+    
     setConfirmed(true)
-    if (isCorrect) setScore(s => s + 1)
-    setAnswers(prev => [...prev, isCorrect])
+    
+    if (isCorrect) {
+      setScore(score + 1)
+    }
+    
+    // Version sans callback – évite l'erreur TypeScript
+    const newAnswers = [...answers, isCorrect]
+    setAnswers(newAnswers)
   }
 
   const handleNext = () => {
@@ -148,7 +155,6 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
         <div><div style={{ fontSize: 40, fontWeight: 900, color: '#3b82f6' }}>{Math.round((score / QUIZ_QUESTIONS.length) * 100)}%</div><div style={{ fontSize: 12, color: '#94a3b8' }}>{ui.score}</div></div>
       </div>
 
-      {/* Zone certificat stylisée */}
       {Math.round((score / QUIZ_QUESTIONS.length) * 100) >= 50 && (
         <div style={{
           backgroundColor: '#f0fdf4',
@@ -167,7 +173,7 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
             color: '#065f46',
             letterSpacing: '0.3px'
           }}>
-             Enter your name for the certificate
+            🎓 Enter your name for the certificate
           </label>
           
           <input 
@@ -202,7 +208,6 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
         </div>
       )}
 
-      {/* Boutons stylisés */}
       <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
         <button
           onClick={() => window.location.reload()}
@@ -229,7 +234,7 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
             e.currentTarget.style.transform = 'translateY(0)'
           }}
         >
-          {ui.restart}
+          🔄 {ui.restart}
         </button>
         
         <button
@@ -261,7 +266,7 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
             e.currentTarget.style.transform = 'translateY(0)'
           }}
         >
-          {ui.close}
+          ✕ {ui.close}
         </button>
       </div>
     </motion.div>

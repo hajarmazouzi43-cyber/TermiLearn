@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
-import { loadFilesystem, resetFilesystem } from '../lib/filesystem'
+import { loadFilesystem } from '../lib/filesystem'
 import { useShellStore } from '../store/shellStore'
 import Terminal from '../components/Terminal'
 import MissionPanel from '../components/MissionPanel'
@@ -24,7 +24,6 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
   const [showCopilot, setShowCopilot] = useState(false)
   const [showQuiz, setShowQuiz] = useState(false)
   const [completedMissions, setCompletedMissions] = useState<number[]>([])
-  // const [resetting, setResetting] = useState(false)
   const { setFilesystem, cwd } = useShellStore()
 
   useEffect(() => {
@@ -47,7 +46,6 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
     init()
   }, [setFilesystem, userId])
 
-
   const handleMissionComplete = (missionId: number) => {
     setCompletedMissions(prev => [...prev, missionId])
   }
@@ -64,322 +62,179 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', fontFamily: "'Segoe UI', Arial, sans-serif" }}>
-
-{/* NAVBAR STYLÉE - TERMINAL PAGE */}
-<nav style={{
-  position: 'sticky',
-  top: 12,
-  zIndex: 50,
-  width: 'calc(100% - 32px)',
-  margin: '0 16px',
-  backgroundColor: 'rgba(255,255,255,0.96)',
-  backdropFilter: 'blur(12px)',
-  borderRadius: 60,
-  boxShadow: '0 4px 20px rgba(0,0,0,0.03), 0 0 0 1px rgba(0,0,0,0.02)',
-  padding: '0 20px',
-  height: 64,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  fontFamily: "'Inter', system-ui, sans-serif"
-}}>
-  
-  {/* Logo + Titre */}
-  <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={onGoHome}>
-    <div style={{
-      width: 38, height: 38,
-      background: 'linear-gradient(135deg, #10b981, #3b82f6)',
-      borderRadius: 12,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      boxShadow: '0 6px 14px rgba(16,185,129,0.25)'
+    <div style={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(135deg, #f8fafc 0%, #ffffff 100%)',
+      fontFamily: "'Inter', 'Segoe UI', Arial, sans-serif" 
     }}>
-      <span style={{ color: 'white', fontWeight: 800, fontSize: 14, fontFamily: 'monospace' }}>$_</span>
-    </div>
-    <div>
-      <div style={{ fontWeight: 700, fontSize: 16, color: '#0a2540' }}>TermiLearn</div>
-      <div style={{ fontSize: 11, color: '#5c6f87' }}>Linux Terminal</div>
-    </div>
-  </div>
 
-  {/* Statut environment */}
-  <div style={{
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    backgroundColor: '#f0fdf4',
-    border: '1px solid #bbf7d0',
-    borderRadius: 40,
-    padding: '6px 16px'
-  }}>
-    <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#10b981' }} />
-    <span style={{ fontSize: 12, color: '#15803d', fontWeight: 600 }}>Environment ready</span>
-  </div>
+      {/* NAVBAR */}
+      <nav style={{ backgroundColor: 'white', borderBottom: '1px solid #e2e8f0', padding: '0 24px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 40 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          {onGoHome && (
+            <button onClick={onGoHome}
+              style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', color: '#64748b', fontWeight: 600, fontSize: 14, cursor: 'pointer', padding: '6px 10px', borderRadius: 8 }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#f1f5f9'; e.currentTarget.style.color = '#0f172a' }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#64748b' }}
+            >← Home</button>
+          )}
+          <div style={{ width: 1, height: 24, backgroundColor: '#e2e8f0' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ width: 34, height: 34, backgroundColor: '#0f172a', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ color: '#10b981', fontWeight: 800, fontSize: 12, fontFamily: 'monospace' }}>$_</span>
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 15, color: '#0f172a' }}>TermiLearn</div>
+              <div style={{ fontSize: 11, color: '#94a3b8' }}>Linux Terminal</div>
+            </div>
+          </div>
+        </div>
 
-  {/* Boutons d'action */}
-  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-    {/* Terminal - bleu foncé */}
-    <button
-      onClick={() => setShowTerminalModal(true)}
-      style={{
-        padding: '8px 18px',
-        borderRadius: 40,
-        border: 'none',
-        backgroundColor: '#0f172a',
-        color: '#10b981',
-        fontWeight: 600,
-        fontSize: 13,
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-        transition: 'all 0.2s ease'
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.backgroundColor = '#1e293b'
-        e.currentTarget.style.transform = 'translateY(-1px)'
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.backgroundColor = '#0f172a'
-        e.currentTarget.style.transform = 'translateY(0)'
-      }}
-    >
-      Terminal
-    </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 20, padding: '5px 14px' }}>
+          <div style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: '#10b981' }} />
+          <span style={{ fontSize: 12, color: '#16a34a', fontWeight: 600 }}>Environment ready</span>
+        </div>
 
-    {/* Missions - ORANGE */}
-    <button
-      onClick={() => { setShowMissions(m => !m); setShowQuiz(false) }}
-      style={{
-        padding: '8px 18px',
-        borderRadius: 40,
-        backgroundColor: showMissions ? '#fef3c7' : '#ffffff',
-        border: showMissions ? 'none' : '1px solid #e2e8f0',
-        color: showMissions ? '#b45309' : '#5c6f87',
-        fontWeight: 600,
-        fontSize: 13,
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-        transition: 'all 0.2s ease',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8
-      }}
-      onMouseEnter={e => {
-        if (!showMissions) {
-          e.currentTarget.style.backgroundColor = '#fef3c7'
-          e.currentTarget.style.color = '#b45309'
-          e.currentTarget.style.borderColor = '#fde68a'
-        }
-      }}
-      onMouseLeave={e => {
-        if (!showMissions) {
-          e.currentTarget.style.backgroundColor = '#ffffff'
-          e.currentTarget.style.color = '#5c6f87'
-          e.currentTarget.style.borderColor = '#e2e8f0'
-        }
-      }}
-    >
-      Missions
-      <span style={{
-        backgroundColor: completedMissions.length === 5 ? '#10b981' : '#e2e8f0',
-        color: completedMissions.length === 5 ? 'white' : '#5c6f87',
-        borderRadius: 20,
-        padding: '2px 10px',
-        fontSize: 11,
-        fontWeight: 600
-      }}>
-        {completedMissions.length}/5
-      </span>
-    </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button onClick={() => setShowTerminalModal(true)} style={{ padding: '8px 16px', borderRadius: 9, border: 'none', backgroundColor: '#0f172a', color: '#10b981', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>Terminal</button>
 
-    {/* Quiz - VERT */}
-    <button
-      onClick={() => { setShowQuiz(q => !q); setShowMissions(false) }}
-      style={{
-        padding: '8px 18px',
-        borderRadius: 40,
-    
-        backgroundColor: showQuiz ? '#dcfce7' : '#ffffff',
-        border: showQuiz ? 'none' : '1px solid #e2e8f0',
-        color: showQuiz ? '#166534' : '#5c6f87',
-        fontWeight: 600,
-        fontSize: 13,
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-        transition: 'all 0.2s ease'
-      }}
-      onMouseEnter={e => {
-        if (!showQuiz) {
-          e.currentTarget.style.backgroundColor = '#dcfce7'
-          e.currentTarget.style.color = '#166534'
-          e.currentTarget.style.borderColor = '#bbf7d0'
-        }
-      }}
-      onMouseLeave={e => {
-        if (!showQuiz) {
-          e.currentTarget.style.backgroundColor = '#ffffff'
-          e.currentTarget.style.color = '#5c6f87'
-          e.currentTarget.style.borderColor = '#e2e8f0'
-        }
-      }}
-    >
-      Quiz
-    </button>
+          <button
+            onClick={() => { setShowMissions(m => !m); setShowQuiz(false) }}
+            style={{
+              padding: '8px 16px', borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: 'pointer',
+              backgroundColor: showMissions ? '#fefce8' : 'white',
+              border: showMissions ? 'none' : '1.5px solid #e2e8f0',
+              color: showMissions ? '#b45309' : '#64748b'
+            }}
+          >
+            Missions <span style={{ backgroundColor: completedMissions.length === 5 ? '#10b981' : '#e2e8f0', color: completedMissions.length === 5 ? 'white' : '#64748b', borderRadius: 20, padding: '1px 7px', fontSize: 11 }}>{completedMissions.length}/5</span>
+          </button>
 
-    {/* Cheat Sheet - BLEU CLAIR */}
-    <button
-      onClick={() => setShowCheatSheet(true)}
-      style={{
-        padding: '8px 18px',
-        borderRadius: 40,
-        border: '1px solid #e2e8f0',
-        backgroundColor: '#ffffff',
-        color: '#5c6f87',
-        fontWeight: 600,
-        fontSize: 13,
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-        transition: 'all 0.2s ease'
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.backgroundColor = '#e0f2fe'
-        e.currentTarget.style.color = '#0369a1'
-        e.currentTarget.style.borderColor = '#bae6fd'
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.backgroundColor = '#ffffff'
-        e.currentTarget.style.color = '#5c6f87'
-        e.currentTarget.style.borderColor = '#e2e8f0'
-      }}
-    >
-      Cheat Sheet
-    </button>
+          <button
+            onClick={() => { setShowQuiz(q => !q); setShowMissions(false) }}
+            style={{
+              padding: '8px 16px', borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: 'pointer',
+              backgroundColor: showQuiz ? '#f0fdf4' : 'white',
+              border: showQuiz ? 'none' : '1.5px solid #e2e8f0',
+              color: showQuiz ? '#059669' : '#64748b'
+            }}
+          >Quiz</button>
 
-    {/* AI Copilot - VIOLET */}
-    <button
-      onClick={() => setShowCopilot(c => !c)}
-      style={{
-        padding: '8px 18px',
-        borderRadius: 40,
-        
-        backgroundColor: showCopilot ? '#f3e8ff' : '#ffffff',
-        border: showCopilot ? 'none' : '1px solid #e2e8f0',
-        color: showCopilot ? '#6b21a5' : '#5c6f87',
-        fontWeight: 600,
-        fontSize: 13,
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-        transition: 'all 0.2s ease',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 6
-      }}
-      onMouseEnter={e => {
-        if (!showCopilot) {
-          e.currentTarget.style.backgroundColor = '#f3e8ff'
-          e.currentTarget.style.color = '#6b21a5'
-          e.currentTarget.style.borderColor = '#d8b4fe'
-        }
-      }}
-      onMouseLeave={e => {
-        if (!showCopilot) {
-          e.currentTarget.style.backgroundColor = '#ffffff'
-          e.currentTarget.style.color = '#5c6f87'
-          e.currentTarget.style.borderColor = '#e2e8f0'
-        }
-      }}
-    >
-      🤖 AI Copilot
-    </button>
-  </div>
+          <button onClick={() => setShowCheatSheet(true)} style={{ padding: '8px 16px', borderRadius: 9, border: '1.5px solid #e2e8f0', backgroundColor: 'white', color: '#64748b', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>Cheat Sheet</button>
 
-  {/* Zone droite utilisateur */}
-  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: 10,
-      backgroundColor: '#f8fafc',
-      borderRadius: 40,
-      padding: '5px 16px 5px 12px',
-      border: '1px solid #eef2f6'
-    }}>
-      <div style={{
-        width: 32, height: 32, borderRadius: 32,
-        background: 'linear-gradient(135deg, #10b981, #3b82f6)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: 'white', fontWeight: 700, fontSize: 13,
-        boxShadow: '0 2px 8px rgba(16,185,129,0.2)'
-      }}>
-        {userEmail?.charAt(0).toUpperCase() || 'U'}
-      </div>
-      <span style={{ fontSize: 13, fontWeight: 500, color: '#1e2a3e', maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-        {userEmail}
-      </span>
-    </div>
+          <button
+            onClick={() => setShowCopilot(c => !c)}
+            style={{
+              padding: '8px 16px', borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: 'pointer',
+              backgroundColor: showCopilot ? '#eef2ff' : 'white',
+              border: showCopilot ? 'none' : '1.5px solid #e2e8f0',
+              color: showCopilot ? '#6366f1' : '#64748b'
+            }}
+          >🤖 AI Copilot</button>
 
-    <button
-      onClick={() => supabase.auth.signOut()}
-      style={{
-        padding: '8px 20px',
-        borderRadius: 40,
-        border: '1px solid #e2e8f0',
-        backgroundColor: 'white',
-        color: '#5c6f87',
-        fontSize: 13,
-        fontWeight: 500,
-        cursor: 'pointer',
-        transition: 'all 0.2s ease',
-        fontFamily: 'inherit'
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.borderColor = '#fecaca'
-        e.currentTarget.style.backgroundColor = '#fff5f5'
-        e.currentTarget.style.color = '#ef4444'
-        e.currentTarget.style.transform = 'translateY(-1px)'
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.borderColor = '#e2e8f0'
-        e.currentTarget.style.backgroundColor = 'white'
-        e.currentTarget.style.color = '#5c6f87'
-        e.currentTarget.style.transform = 'translateY(0)'
-      }}
-    >
-      Sign out
-    </button>
-  </div>
-</nav>
+          <div style={{ width: 1, height: 24, backgroundColor: '#e2e8f0' }} />
+          <span style={{ fontSize: 12, color: '#94a3b8', maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{userEmail}</span>
+
+          <button onClick={() => supabase.auth.signOut()} style={{ padding: '7px 14px', borderRadius: 9, border: '1.5px solid #fecaca', backgroundColor: '#fff5f5', color: '#ef4444', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>Sign out</button>
+        </div>
+      </nav>
 
       {/* MAIN CONTENT */}
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '32px 24px', display: 'flex', gap: 24, alignItems: 'flex-start' }}>
-
-        {/* Left */}
         <div style={{ flex: 1, minWidth: 0 }}>
           {!showMissions && !showQuiz ? (
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-              style={{ backgroundColor: 'white', borderRadius: 18, padding: 40, border: '1.5px solid #f1f5f9', boxShadow: '0 4px 24px rgba(0,0,0,0.05)', textAlign: 'center' }}
+              style={{ backgroundColor: 'white', borderRadius: 24, padding: 48, border: '1px solid #eef2f6', boxShadow: '0 8px 24px rgba(0,0,0,0.04)', textAlign: 'center' }}
             >
-             
-              <h2 style={{ fontSize: 40, fontWeight: 800, color: '#0f172a', marginBottom: 10 }}>Ready to practice?</h2>
-              <p style={{ color: '#64748b', fontSize: 15, lineHeight: 1.7, maxWidth: 400, margin: '0 auto 28px' }}>
+              <h2 style={{ fontSize: 40, fontWeight: 800, color: '#0f172a', marginBottom: 12 }}>Ready to practice?</h2>
+              <p style={{ color: '#64748b', fontSize: 15, lineHeight: 1.7, maxWidth: 460, margin: '0 auto 32px' }}>
                 Open the terminal to run Linux commands in a safe virtual environment.
               </p>
-              <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-                <motion.button whileHover={{ y: -2 }} onClick={() => setShowTerminalModal(true)}
-                  style={{ padding: '13px 28px', borderRadius: 12, border: 'none', backgroundColor: '#0f172a', color: '#10b981', fontWeight: 700, fontSize: 15, cursor: 'pointer', fontFamily: 'monospace', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}
-                >$ Open Terminal</motion.button>
-                <motion.button whileHover={{ y: -2 }} onClick={() => setShowMissions(true)}
-                  style={{ padding: '13px 28px', borderRadius: 12, border: '1.5px solid #fde68a', backgroundColor: '#fefce8', color: '#b45309', fontWeight: 700, fontSize: 15, cursor: 'pointer' }}
-                > View Missions</motion.button>
-                <motion.button whileHover={{ y: -2 }} onClick={() => setShowQuiz(true)}
-                  style={{ padding: '13px 28px', borderRadius: 12, border: '1.5px solid #bbf7d0', backgroundColor: '#f0fdf4', color: '#059669', fontWeight: 700, fontSize: 15, cursor: 'pointer' }}
-                > Take Quiz</motion.button>
+              
+              <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 48 }}>
+                <button
+                  onClick={() => setShowTerminalModal(true)}
+                  style={{
+                    padding: '14px 32px',
+                    borderRadius: 40,
+                    border: 'none',
+                    background: 'linear-gradient(135deg, #10b981, #059669)',
+                    color: 'white',
+                    fontWeight: 700,
+                    fontSize: 15,
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(16,185,129,0.35)',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(16,185,129,0.45)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(16,185,129,0.35)'
+                  }}
+                >
+                  🖥️ Open Terminal
+                </button>
+
+                <button
+                  onClick={() => setShowMissions(true)}
+                  style={{
+                    padding: '14px 32px',
+                    borderRadius: 40,
+                    border: '1.5px solid #fde68a',
+                    backgroundColor: '#fffbeb',
+                    color: '#b45309',
+                    fontWeight: 700,
+                    fontSize: 15,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.backgroundColor = '#fef3c7'
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.backgroundColor = '#fffbeb'
+                    e.currentTarget.style.transform = 'translateY(0)'
+                  }}
+                >
+                  🎯 View Missions
+                </button>
+
+                <button
+                  onClick={() => setShowQuiz(true)}
+                  style={{
+                    padding: '14px 32px',
+                    borderRadius: 40,
+                    border: '1.5px solid #d1fae5',
+                    backgroundColor: '#f0fdf4',
+                    color: '#059669',
+                    fontWeight: 700,
+                    fontSize: 15,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.backgroundColor = '#dcfce7'
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.backgroundColor = '#f0fdf4'
+                    e.currentTarget.style.transform = 'translateY(0)'
+                  }}
+                >
+                  📝 Take Quiz
+                </button>
               </div>
 
-              <div style={{ marginTop: 40, textAlign: 'left' }}>
-                <p style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', marginBottom: 12, textTransform: 'uppercase', letterSpacing: 1 }}>Quick start commands</p>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8 }}>
+              {/* Quick start commands */}
+              <div style={{ textAlign: 'left', maxWidth: 540, margin: '0 auto' }}>
+                <p style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', marginBottom: 16, textTransform: 'uppercase', letterSpacing: 1 }}>
+                  Quick start commands
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 10 }}>
                   {[
                     { cmd: 'ls -la', desc: 'List all files' },
                     { cmd: 'pwd', desc: 'Current path' },
@@ -388,43 +243,50 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
                     { cmd: 'cat readme.txt', desc: 'Read a file' },
                     { cmd: 'help', desc: 'All commands' },
                   ].map(q => (
-                    <div key={q.cmd}
-                      style={{ backgroundColor: '#f8fafc', borderRadius: 10, padding: '10px 14px', border: '1.5px solid #f1f5f9', cursor: 'pointer' }}
+                    <div
+                      key={q.cmd}
                       onClick={() => setShowTerminalModal(true)}
+                      style={{
+                        backgroundColor: '#f8fafc',
+                        borderRadius: 12,
+                        padding: '12px 16px',
+                        border: '1px solid #eef2f6',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.borderColor = '#10b981'
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(16,185,129,0.08)'
+                        e.currentTarget.style.transform = 'translateY(-2px)'
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.borderColor = '#eef2f6'
+                        e.currentTarget.style.boxShadow = 'none'
+                        e.currentTarget.style.transform = 'translateY(0)'
+                      }}
                     >
-                      <code style={{ color: '#10b981', fontSize: 13, fontFamily: 'monospace', display: 'block', marginBottom: 2 }}>{q.cmd}</code>
+                      <code style={{ color: '#10b981', fontSize: 13, fontFamily: 'monospace', display: 'block', marginBottom: 4 }}>{q.cmd}</code>
                       <span style={{ fontSize: 11, color: '#94a3b8' }}>{q.desc}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </motion.div>
-
           ) : showQuiz ? (
-            <div style={{ backgroundColor: 'white', borderRadius: 18, border: '1.5px solid #f1f5f9', boxShadow: '0 4px 24px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
-              <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div>
-                  <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', marginBottom: 2 }}>📝 Quiz Linux</h2>
-                  <p style={{ fontSize: 12, color: '#94a3b8', margin: 0 }}>15 questions • Progressive • Easy → Hard</p>
-                </div>
-                <button onClick={() => setShowQuiz(false)}
-                  style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: 20 }}
-                >✕</button>
+            <div style={{ backgroundColor: 'white', borderRadius: 18, border: '1.5px solid #f1f5f9', overflow: 'hidden' }}>
+              <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a' }}>📝 Quiz Linux</h2>
+                <button onClick={() => setShowQuiz(false)} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer' }}>✕</button>
               </div>
               <QuizPanel onClose={() => setShowQuiz(false)} />
             </div>
-
           ) : (
-            <div style={{ backgroundColor: 'white', borderRadius: 18, padding: 24, border: '1.5px solid #f1f5f9', boxShadow: '0 4px 24px rgba(0,0,0,0.05)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-                <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a' }}> Missions</h2>
+            <div style={{ backgroundColor: 'white', borderRadius: 18, padding: 24, border: '1.5px solid #f1f5f9' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a' }}>🎯 Missions</h2>
                 <div style={{ display: 'flex', gap: 8 }}>
-                  <button onClick={() => { setShowMissions(false); setShowQuiz(true) }}
-                    style={{ padding: '8px 16px', borderRadius: 9, border: '1.5px solid #bbf7d0', backgroundColor: '#f0fdf4', color: '#059669', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
-                  > Quiz</button>
-                  <button onClick={() => setShowTerminalModal(true)}
-                    style={{ padding: '8px 16px', borderRadius: 9, border: 'none', backgroundColor: '#0f172a', color: '#10b981', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'monospace' }}
-                  >$ Open Terminal</button>
+                  <button onClick={() => { setShowMissions(false); setShowQuiz(true) }} style={{ padding: '8px 16px', borderRadius: 9, border: '1.5px solid #bbf7d0', backgroundColor: '#f0fdf4', color: '#059669', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}> Quiz</button>
+                  <button onClick={() => setShowTerminalModal(true)} style={{ padding: '8px 16px', borderRadius: 9, border: 'none', backgroundColor: '#0f172a', color: '#10b981', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>$ Open Terminal</button>
                 </div>
               </div>
               <MissionPanel userId={userId} completedMissions={completedMissions} onMissionComplete={handleMissionComplete} />
@@ -432,23 +294,20 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
           )}
         </div>
 
-        {/* Right — AI Copilot */}
-        <AnimatePresence>
+<AnimatePresence>
           {showCopilot && (
             <motion.div
               initial={{ opacity: 0, x: 40, width: 0 }}
               animate={{ opacity: 1, x: 0, width: 360 }}
               exit={{ opacity: 0, x: 40, width: 0 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              style={{ flexShrink: 0, overflow: 'hidden', height: 'calc(100vh - 124px)', position: 'sticky', top: 92 }}
+              style={{ flexShrink: 0, height: 'calc(100vh - 124px)', position: 'sticky', top: 92 }}
             >
-              <div style={{ width: 360, height: '100%', backgroundColor: 'white', borderRadius: 18, border: '1.5px solid #f1f5f9', boxShadow: '0 4px 24px rgba(0,0,0,0.08)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ width: 360, height: '100%', backgroundColor: 'white', borderRadius: 18, border: '1.5px solid #f1f5f9', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                 <AICopilot onClose={() => setShowCopilot(false)} currentCwd={cwd} />
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-
       </div>
 
       {/* TERMINAL MODAL */}
@@ -465,26 +324,16 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: 'spring', damping: 25 }}
               style={{ width: '100%', maxWidth: 860, height: '75vh', display: 'flex', flexDirection: 'column', borderRadius: 20, overflow: 'hidden', boxShadow: '0 40px 80px rgba(0,0,0,0.4)', border: '1px solid #334155' }}
             >
-              <div style={{ backgroundColor: '#1e293b', padding: '12px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ display: 'flex', gap: 6 }}>
-                    <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#ef4444', cursor: 'pointer' }} onClick={() => setShowTerminalModal(false)} />
-                    <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#f59e0b' }} />
-                    <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#10b981' }} />
-                  </div>
-                  <span style={{ color: '#64748b', fontSize: 13, fontFamily: 'monospace', marginLeft: 6 }}>bash — user@termilearnhost</span>
+              <div style={{ backgroundColor: '#1e293b', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#ef4444', cursor: 'pointer' }} onClick={() => setShowTerminalModal(false)} />
+                  <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#f59e0b' }} />
+                  <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#10b981' }} />
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ fontSize: 11, color: '#64748b', fontFamily: 'monospace' }}>Press ESC to close</span>
-                  <button onClick={() => setShowTerminalModal(false)}
-                    style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 18, lineHeight: 1, padding: '2px 6px', borderRadius: 4 }}
-                    onMouseEnter={e => e.currentTarget.style.color = 'white'}
-                    onMouseLeave={e => e.currentTarget.style.color = '#64748b'}
-                  >✕</button>
-                </div>
+                <span style={{ color: '#64748b', fontSize: 13, fontFamily: 'monospace' }}>bash — user@termilearnhost</span>
+                <button onClick={() => setShowTerminalModal(false)} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: 18, cursor: 'pointer' }}>✕</button>
               </div>
               <div style={{ flex: 1, minHeight: 0 }}>
                 <Terminal userId={userId} />
@@ -493,12 +342,15 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* CHEAT SHEET */}
-      <AnimatePresence>
+<AnimatePresence>
         {showCheatSheet && <CheatSheet onClose={() => setShowCheatSheet(false)} />}
       </AnimatePresence>
 
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   )
 }
