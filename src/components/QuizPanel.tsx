@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { QUIZ_QUESTIONS, getQuizResult } from '../lib/quiz'
 import { jsPDF } from "jspdf"
 
-// --- COMPOSANT GÉNÉRATEUR ---
+// --- COMPOSANT GÉNÉRATEUR DE CERTIFICAT (STYLISÉ) ---
 interface CertificateProps {
   userName: string;
   score: number;
@@ -14,15 +14,13 @@ const CertificateGenerator = ({ userName, score }: CertificateProps) => {
     try {
       const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
       
-      // --- 1. DESIGN BORDURES ---
       doc.setLineWidth(2);
-      doc.setDrawColor(16, 185, 129); // Vert
+      doc.setDrawColor(16, 185, 129);
       doc.rect(10, 10, 277, 190); 
-      doc.setDrawColor(15, 23, 42); // Sombre
+      doc.setDrawColor(15, 23, 42);
       doc.setLineWidth(0.5);
       doc.rect(12, 12, 273, 186);
 
-      // --- 2. TEXTES ---
       doc.setFont("helvetica", "bold");
       doc.setFontSize(40);
       doc.setTextColor(15, 23, 42);
@@ -42,7 +40,6 @@ const CertificateGenerator = ({ userName, score }: CertificateProps) => {
       doc.text("successfully completed the Linux Terminal Mastery Quiz", 148.5, 120, { align: "center" });
       doc.text(`Final Score: ${score}%`, 148.5, 135, { align: "center" });
 
-      // --- 3. LE BADGE (Style Médaille) ---
       doc.setDrawColor(16, 185, 129);
       doc.setLineWidth(0.8);
       doc.line(40, 155, 55, 155); 
@@ -56,7 +53,6 @@ const CertificateGenerator = ({ userName, score }: CertificateProps) => {
       doc.text("OFFICIAL", 47.5, 165, { align: "center" });
       doc.text("PASSED", 47.5, 172, { align: "center" });
 
-      // --- 4. TA SIGNATURE (Violette & Graphique) ---
       doc.setDrawColor(75, 0, 130); 
       doc.setLineWidth(1);
       doc.line(210, 170, 220, 150); 
@@ -76,21 +72,40 @@ const CertificateGenerator = ({ userName, score }: CertificateProps) => {
   };
 
   return (
-    <div style={{ marginTop: 24 }}>
-      <button
-        onClick={generatePDF}
-        style={{ padding: '12px 28px', borderRadius: 12, border: 'none', backgroundColor: '#10b981', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: 16, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
-      >
-         Download My Certificate (EN)
-      </button>
-    </div>
+    <button
+      onClick={generatePDF}
+      style={{
+        padding: '12px 28px',
+        borderRadius: '40px',
+        border: 'none',
+        background: 'linear-gradient(135deg, #10b981, #059669)',
+        color: 'white',
+        fontWeight: 700,
+        fontSize: '14px',
+        cursor: 'pointer',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '8px',
+        boxShadow: '0 4px 12px rgba(16,185,129,0.3)',
+        transition: 'all 0.2s ease'
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.transform = 'translateY(-2px)'
+        e.currentTarget.style.boxShadow = '0 8px 20px rgba(16,185,129,0.4)'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.transform = 'translateY(0)'
+        e.currentTarget.style.boxShadow = '0 4px 12px rgba(16,185,129,0.3)'
+      }}
+    >
+       Download My Certificate (EN)
+    </button>
   );
 };
 
 // --- COMPOSANT PRINCIPAL ---
 export default function QuizPanel({ onClose }: { onClose?: () => void }) {
   const [lang, setLang] = useState<'fr' | 'en'>('fr')
-
   const [current, setCurrent] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
   const [confirmed, setConfirmed] = useState(false)
@@ -116,9 +131,7 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
     setAnswers(prev => [...prev, isCorrect])
   }
 
-//  Barre s ajoute automatiquement
-
-      const handleNext = () => {
+  const handleNext = () => {
     if (current + 1 >= QUIZ_QUESTIONS.length) setFinished(true)
     else { setCurrent(c => c + 1); setSelected(null); setConfirmed(false) }
   }
@@ -135,23 +148,121 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
         <div><div style={{ fontSize: 40, fontWeight: 900, color: '#3b82f6' }}>{Math.round((score / QUIZ_QUESTIONS.length) * 100)}%</div><div style={{ fontSize: 12, color: '#94a3b8' }}>{ui.score}</div></div>
       </div>
 
+      {/* Zone certificat stylisée */}
       {Math.round((score / QUIZ_QUESTIONS.length) * 100) >= 50 && (
-        <div style={{ backgroundColor: '#f0fdf4', padding: '20px', borderRadius: '12px', border: '1px dashed #10b981', marginBottom: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-          <label style={{ fontSize: '14px', fontWeight: 700, color: '#065f46' }}>Enter your name for the certificate:</label>
+        <div style={{
+          backgroundColor: '#f0fdf4',
+          padding: '24px',
+          borderRadius: '20px',
+          border: '1px solid #d1fae5',
+          marginBottom: '28px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px'
+        }}>
+          <label style={{
+            fontSize: '14px',
+            fontWeight: 600,
+            color: '#065f46',
+            letterSpacing: '0.3px'
+          }}>
+             Enter your name for the certificate
+          </label>
+          
           <input 
             type="text" 
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
             placeholder="Ex: MAZOUZI Hajar"
-            style={{ padding: '10px 15px', borderRadius: '8px', border: '2px solid #10b981', width: '80%', textAlign: 'center', fontSize: '16px' }}
+            style={{
+              width: '280px',
+              padding: '12px 18px',
+              borderRadius: '40px',
+              border: '2px solid #d1fae5',
+              backgroundColor: 'white',
+              fontSize: '14px',
+              textAlign: 'center',
+              fontWeight: 500,
+              color: '#0f172a',
+              outline: 'none',
+              transition: 'all 0.2s ease'
+            }}
+            onFocus={e => {
+              e.target.style.borderColor = '#10b981'
+              e.target.style.boxShadow = '0 0 0 3px rgba(16,185,129,0.1)'
+            }}
+            onBlur={e => {
+              e.target.style.borderColor = '#d1fae5'
+              e.target.style.boxShadow = 'none'
+            }}
           />
+          
           <CertificateGenerator userName={userName} score={Math.round((score / QUIZ_QUESTIONS.length) * 100)} />
         </div>
       )}
 
+      {/* Boutons stylisés */}
       <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-        <button onClick={() => window.location.reload()} style={{ padding: '12px 28px', borderRadius: 12, border: 'none', backgroundColor: '#0f172a', color: '#10b981', fontWeight: 700, cursor: 'pointer' }}>{ui.restart}</button>
-        {onClose && <button onClick={onClose} style={{ padding: '12px 28px', borderRadius: 12, border: '1.5px solid #e2e8f0', backgroundColor: 'white', color: '#64748b', fontWeight: 700, cursor: 'pointer' }}>{ui.close}</button>}
+        <button
+          onClick={() => window.location.reload()}
+          style={{
+            padding: '12px 28px',
+            borderRadius: '40px',
+            border: 'none',
+            background: '#f1f5f9',
+            color: '#10b981',
+            fontWeight: 700,
+            fontSize: '14px',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.backgroundColor = '#e2e8f0'
+            e.currentTarget.style.transform = 'translateY(-1px)'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.backgroundColor = '#f1f5f9'
+            e.currentTarget.style.transform = 'translateY(0)'
+          }}
+        >
+          {ui.restart}
+        </button>
+        
+        <button
+          onClick={onClose}
+          style={{
+            padding: '12px 28px',
+            borderRadius: '40px',
+            border: '1.5px solid #e2e8f0',
+            backgroundColor: 'white',
+            color: '#64748b',
+            fontWeight: 600,
+            fontSize: '14px',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = '#fecaca'
+            e.currentTarget.style.backgroundColor = '#fff5f5'
+            e.currentTarget.style.color = '#ef4444'
+            e.currentTarget.style.transform = 'translateY(-1px)'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.borderColor = '#e2e8f0'
+            e.currentTarget.style.backgroundColor = 'white'
+            e.currentTarget.style.color = '#64748b'
+            e.currentTarget.style.transform = 'translateY(0)'
+          }}
+        >
+          {ui.close}
+        </button>
       </div>
     </motion.div>
   )
@@ -167,11 +278,10 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
           </div>
         </div>
         <div style={{ height: 6, backgroundColor: '#f1f5f9', borderRadius: 10, overflow: 'hidden' }}>
-
-  {/* // --Barre de progression --- */}
-
-          <motion.div animate={{ width: `${((current + 1) / QUIZ_QUESTIONS.length) * 100}%` }} 
-          style={{ height: '100%', background: 'linear-gradient(90deg, #10b981, #3b82f6)' }} />
+          <motion.div 
+            animate={{ width: `${((current + 1) / QUIZ_QUESTIONS.length) * 100}%` }} 
+            style={{ height: '100%', background: 'linear-gradient(90deg, #10b981, #3b82f6)' }} 
+          />
         </div>
       </div>
 
@@ -197,11 +307,15 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
             ))}
           </div>
 
-          <motion.button onClick={confirmed ? handleNext : handleConfirm} disabled={selected === null}
-            style={{ width: '100%', padding: '13px', borderRadius: 12, border: 'none', fontWeight: 700, cursor: selected === null ? 'not-allowed' : 'pointer',
+          <motion.button 
+            onClick={confirmed ? handleNext : handleConfirm} 
+            disabled={selected === null}
+            style={{
+              width: '100%', padding: '13px', borderRadius: 12, border: 'none', fontWeight: 700, cursor: selected === null ? 'not-allowed' : 'pointer',
               background: confirmed ? 'linear-gradient(135deg, #10b981, #3b82f6)' : (selected !== null ? '#0f172a' : '#f1f5f9'),
               color: confirmed ? 'white' : (selected !== null ? '#10b981' : '#94a3b8')
-            }}>
+            }}
+          >
             {confirmed ? (current + 1 >= QUIZ_QUESTIONS.length ? ui.results : ui.next) : ui.validate}
           </motion.button>
         </motion.div>
