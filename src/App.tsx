@@ -41,13 +41,39 @@ export default function App() {
   const [showApp, setShowApp] = useState(false)
   const [currentPage, setCurrentPage] = useState<Page>('home')
 
+  // Vérification de l'existence du profil utilisateur
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUserId(session?.user?.id ?? null)
-      setUserEmail(session?.user?.email ?? '')
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (session?.user) {
+        // Vérifier si le profil existe toujours dans la base
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('id', session.user.id)
+          .single()
+        
+        if (!profile || error) {
+          // Profil supprimé ou introuvable → déconnexion forcée
+          await supabase.auth.signOut()
+          setUserId(null)
+          setUserEmail('')
+        } else {
+          setUserId(session.user.id)
+          setUserEmail(session.user.email ?? '')
+        }
+      } else {
+        setUserId(null)
+        setUserEmail('')
+      }
       setLoading(false)
-    })
+    }
+    
+    checkUser()
+  }, [])
 
+  useEffect(() => {
     setTimeout(() => setShowApp(true), 5000)
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(

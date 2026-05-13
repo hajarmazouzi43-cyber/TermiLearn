@@ -117,11 +117,11 @@ function HoverCard({ n, title, color, bg, border, desc, hover, action, actionLab
 
 const DEMO_STEPS = [
   { prompt: 'user@termilearnhost:~$', cmd: ' ls', output: 'documents/  projects/  readme.txt', outputColor: '#60a5fa' },
-  { prompt: 'user@termilearnhost:~$', cmd: ' cat readme.txt', output: 'Welcome to TermiLearn! 🚀', outputColor: '#94a3b8' },
+  { prompt: 'user@termilearnhost:~$', cmd: ' cat readme.txt', output: 'Welcome to TermiLearn! ', outputColor: '#94a3b8' },
   { prompt: 'user@termilearnhost:~$', cmd: ' mkdir myproject', output: '', outputColor: '' },
   { prompt: 'user@termilearnhost:~$', cmd: ' cd myproject', output: '', outputColor: '' },
   { prompt: 'user@termilearnhost:~/myproject$', cmd: ' touch index.txt', output: '', outputColor: '' },
-  { prompt: 'user@termilearnhost:~/myproject$', cmd: ' echo Hello Linux!', output: 'Hello Linux! 🎉', outputColor: '#10b981' },
+  { prompt: 'user@termilearnhost:~/myproject$', cmd: ' echo Hello Linux!', output: 'Hello Linux! ', outputColor: '#10b981' },
 ]
 
 function TerminalDemo() {

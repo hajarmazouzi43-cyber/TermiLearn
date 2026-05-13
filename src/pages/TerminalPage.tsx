@@ -171,7 +171,7 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
               <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
                   <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', marginBottom: 2 }}>📝 Quiz Linux</h2>
-                  <p style={{ fontSize: 12, color: '#94a3b8', margin: 0 }}>15 questions • Progressif • Easy → Hard</p>
+                  <p style={{ fontSize: 12, color: '#94a3b8', margin: 0 }}>15 questions • Progressive • Easy → Hard</p>
                 </div>
                 <button onClick={() => setShowQuiz(false)} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: 20 }}>✕</button>
               </div>
@@ -181,7 +181,7 @@ export default function TerminalPage({ userId, userEmail, showMissionsDefault = 
           ) : (
             <div style={{ backgroundColor: 'white', borderRadius: 18, padding: 24, border: '1.5px solid #f1f5f9', boxShadow: '0 4px 24px rgba(0,0,0,0.05)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-                <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a' }}>🎯 Missions</h2>
+                <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a' }}> Missions</h2>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button onClick={() => { setShowMissions(false); setShowQuiz(true) }} style={{ padding: '8px 16px', borderRadius: 9, border: '1.5px solid #bbf7d0', backgroundColor: '#f0fdf4', color: '#059669', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}> Quiz</button>
                   <button onClick={() => setShowTerminalModal(true)} style={{ padding: '8px 16px', borderRadius: 9, border: 'none', backgroundColor: '#0f172a', color: '#10b981', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'monospace' }}>$ Open Terminal</button>

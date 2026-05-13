@@ -98,7 +98,7 @@ const CertificateGenerator = ({ userName, score }: CertificateProps) => {
         e.currentTarget.style.boxShadow = '0 4px 12px rgba(16,185,129,0.3)'
       }}
     >
-      🎓 Download My Certificate (EN)
+      Download My Certificate (EN)
     </button>
   );
 };
@@ -137,7 +137,8 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
     const newAnswers = [...answers, isCorrect]
     setAnswers(newAnswers)
   }
-
+  
+// Ajout auto 
   const handleNext = () => {
     if (current + 1 >= QUIZ_QUESTIONS.length) setFinished(true)
     else { setCurrent(c => c + 1); setSelected(null); setConfirmed(false) }
@@ -173,7 +174,7 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
             color: '#065f46',
             letterSpacing: '0.3px'
           }}>
-            🎓 Enter your name for the certificate
+             Enter your name for the certificate
           </label>
           
           <input 
@@ -234,7 +235,7 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
             e.currentTarget.style.transform = 'translateY(0)'
           }}
         >
-          🔄 {ui.restart}
+          {ui.restart}
         </button>
         
         <button
@@ -266,7 +267,7 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
             e.currentTarget.style.transform = 'translateY(0)'
           }}
         >
-          ✕ {ui.close}
+           {ui.close}
         </button>
       </div>
     </motion.div>
@@ -289,7 +290,7 @@ export default function QuizPanel({ onClose }: { onClose?: () => void }) {
           />
         </div>
       </div>
-
+      {/* barre de progression */}
       <AnimatePresence mode="wait">
         <motion.div key={current} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
           <div style={{ backgroundColor: '#f8fafc', borderRadius: 14, padding: '18px 20px', marginBottom: 20, border: '1.5px solid #f1f5f9' }}>
